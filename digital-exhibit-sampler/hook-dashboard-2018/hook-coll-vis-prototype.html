@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Barnett Hook Papers and Needlework Overview</title>
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" href="hook-coll-vis-prototype.css"/>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <script src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
+        <link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css"/>
+    </head>
+
+    <body>
+        <h1>Barnett Hook Papers and Needlework</h1>
+
+        <div class="coll-browse">
+            <p><a class="coll-browse-button" href="https://media.library.ohio.edu/digital/collection/p15808coll9/search">Browse</a> the <span id="item-count" style="font-size:1.5em;"></span> items of the collection.</p>
+        </div>
+
+        <div class="rank">
+            <div class="vis">
+                <img src="images/hook_thumbnail.v2.jpg" alt="Hook portrait" style="width:100px;margin: 0 8px 5px 0;float:left"/>
+                <p style="margin-top: 0;">Many people viewed master needleworker Barnett A. Hook of rural McArthur, Ohio as a curiosity during his lifetime—in fact, he sometimes made his living highlighting his status as one of "only four men in the United States who teach embroidery." Today, Hook is mostly remembered for his local celebrity in the field of "art needlework," but he tried his hand at more than a dozen careers during the 19th and early 20th centuries, starting with a stint as a teenaged Civil War soldier. Later professions included high school teacher, newspaper editor, political candidate, hotel clerk, stablemaster, cater, entertainer, decorator, and nurse.</p>
+                <p style="margin-bottom: 0;">In 2017, Ohio University Libraries elected to digitize the needlework pieces attributed to Hook that survive in the Mahn Center for Archives and Special Collections' Barnett Hook collection. In addition to Hook’s artistic oeuvre, the Libraries also decided to make available several hundred documents, photographs, and postcards that give context to his life and work. It is worth noting that despite being regarded as a character outside the norm, Hook remains very much a product of his time and place. These materials tell a story of small town social networks and community bonds as well as money troubles, mysogyny, and racism. We present these materials faithfully and fully to encourage research into the historical attitudes and prejudices they reflect.</p>
+            </div>
+
+            <div class="vis">
+                <h2>What does this collection look like?</h2>
+                <p>This collection contains many color postcards.</p>
+                <img src="images/hook-postcard-montage.jpg" alt="Thumbnails of the 500 postcards."/>
+            </div>
+
+            <div class="vis">
+                <h2>When is this collection from?</h2>
+                <p>This collection is mostly from the first decade of the 20th century.</p>
+                <div id="dates-bar-chart"></div>
+            </div>
+        </div>
+
+        <div class="rank">
+            <div class="vis">
+                <h2>What kind of things are in this collection?</h2>
+                <p>This collection is mostly postcards, photographs and images of needlework.</p>
+                <div id="materials-pie-chart"></div>
+            </div>
+
+            <div class="vis">
+                <h2>Where is this collection about?</h2>
+                <p>This collection contains many photographs of the Midwest and South of the United States.</p>
+                <div id="coverage-map"></div>
+            </div>
+
+            <div class="vis">
+                <h2>Who has the rights to this collection?</h2>
+                <p>All items in this collection are in the public domain in the United States.</p>
+                <a href="http://rightsstatements.org/page/NoC-US/1.0/?language=en"><img src="images/NoC-US.dark-white-interior-blue-type.png" alt="http://rightsstatements.org/vocab/NoC-US/1.0/"/></a>
+            </div>
+        </div>
+
+        <div class="rank">
+            <div class="vis">
+                <h2>Download this collection's metadata</h2>
+                <p>This collection's metadata is freely avalible as VRA Core XML files. <a href="http://core.vraweb.org/">VRA Core</a> is a standard way to record information specific to visual resources designed by <a href="http://vraweb.org/">specialist librarians</a>.</p>
+                <div id="download-md" style="text-align:center;"><a style="font: 2em bold;font-family:sans-serif;color:#f8e6ce;background:#968b6f;padding:.2em;margin:.3em;text-decoration:none;display:inline-block;" href="data/hook-vra-core.xml">VRA CORE</a></div>
+            </div>
+        </div>
+
+        <div class="rank">
+            <div id="timeline-embed" style="width: 100%; height: 600px"></div>
+        </div>
+    </body>
+
+    <script src="hook-coll-vis-prototype.js"></script>
+</html>

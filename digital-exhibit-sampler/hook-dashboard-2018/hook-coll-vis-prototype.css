@@ -1,0 +1,56 @@
+body {
+	padding: 15px;
+	margin: 0;
+	max-width: 1300px;
+	font-family: Verdana, sans-serif;
+}
+
+h1 {
+	font-size: 2em;
+	margin: 0px 0 15px 0;
+	padding: 0;
+}
+
+h2 {
+	font-size: 1.1em;
+	margin: 2px;
+	padding: 0;
+}
+
+p {
+	font-size: .8em;
+}
+
+img {
+	max-width: 100%;
+}
+
+.rank {
+	overflow: auto;
+}
+
+.vis {
+	max-width: 400px;
+	display: inline-block;
+	float: left;
+	margin: 5px;
+	padding: 8px;
+	border: 1px solid;
+}
+
+.coll-browse {
+	display: block;
+	float: none;
+	border: none;
+	margin: 10px;
+	padding: 0;
+}
+
+.coll-browse-button {
+	background-color: #00694f;
+	color: #fff;
+	padding: 10px 16px;
+	margin: 2px;
+	text-decoration: none;
+	border-radius: 6px;
+}
