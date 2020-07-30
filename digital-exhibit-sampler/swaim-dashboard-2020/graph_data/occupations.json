@@ -1,0 +1,50 @@
+[
+  {
+    "x": [
+      17,
+      19,
+      21,
+      24,
+      26,
+      31,
+      34,
+      37,
+      38,
+      41,
+      41,
+      44,
+      46,
+      47,
+      64,
+      150,
+      152,
+      160,
+      300,
+      367
+    ],
+    "y": [
+      "film director",
+      "translator",
+      "film producer",
+      "actor",
+      "autobiographer",
+      "literary critic",
+      "historian",
+      "playwright",
+      "biographer",
+      "science fiction writer",
+      "essayist",
+      "children's writer",
+      "author",
+      "university teacher",
+      "poet",
+      "journalist",
+      "screenwriter",
+      "unknown",
+      "novelist",
+      "writer"
+    ],
+    "type": "bar",
+    "orientation": "h"
+  }
+]

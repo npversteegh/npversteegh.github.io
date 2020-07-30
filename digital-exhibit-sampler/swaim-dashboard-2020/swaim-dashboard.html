@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <!-- Plotly -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="swaim-vis.js"></script>
+
+    <title>Don Swaim Collection</title>
+
+    <style>
+     img {
+         max-width: 100%;
+         max-height: 100%;
+     }
+
+     dt {
+         font-size: 1.7rem;
+     }
+
+     .data-badge {
+         height: 1.5rem;
+     }
+    </style>
+</head>
+
+<body>
+    <header class="mb-4">
+        <div class="navbar shadow-sm" style="background-color: #00694E; height: 1.5em; margin-bottom: 0.5em;"></div>
+        <div class="container">
+            <p>
+                <img src="./assets/ohio_logo.svg" style="height: 2.5em" alt="Ohio University Logo"/>
+                <a href="https://www.ohio.edu/library/" style="font-size: 24px; color: #00694E; vertical-align: middle; margin-left: 10px">University Libraries</a>
+            </p>
+            <h1>Don Swaim Collection data dashboard <span class="text-muted">prototype</span></h1>
+            <nav>
+                <ul class="nav nav-pills">
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://media.library.ohio.edu/digital/collection/donswaim/search">Browse the collection</a>
+                    </li>
+                    <li class="nav nav-pills">
+                        <a class="nav-link" href="https://www.ohio.edu/library/collections/digital-archives/don-swaim">Collection Landing Page</a>
+                    </li>
+                    <li class="nav nav-pills">
+                        <a class="nav-link" href="https://www.ohio.edu/library/collections/digital-archives">Digital Archives</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div>
+            <div class="container">
+                <div class="row row-cols-1 row-cols-lg-3">
+
+                    <div class="col mb-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h3 class="card-title">Item counts</h3>
+                            </div>
+                            <div class="card-body">
+                                <dl>
+                                    <dt><span id="object-count"></span></dt>
+                                    <dd>Sets of interviews and their derived <em>Book Beat</em> feature broadcasts</dd>
+                                    <dt><span id="interviewee-count"></span></dt>
+                                    <dd>Persons interviewed</dd>
+                                    <dt><span id="interviews-count"></span></dt>
+                                    <dd>30-60 minute interviews</dd>
+                                    <dt><span id="broadcasts-count"></span></dt>
+                                    <dd>3-5 minute <em>Book Beat</em> feature broadcasts transmitted by WCBS and nationally syndicated</dd>
+                                </dl>
+                            </div>
+                            <div class="card-footer"></div>
+                        </div>
+                    </div>
+
+                    <div class="col mb-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h3 class="card-title">Interview and broadcast dates</h3>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text"><em>Book Beat</em> was produced and broadcast from 1983-1993</p>
+                                <div id="dates"></div>
+                            </div>
+                            <div class="card-footer"></div>
+                        </div>
+                    </div>
+
+                    <div class="col mb-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h3 class="card-title">Interviewee occupations</h3>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">According to Wikidata, most of Don Swaim's interviewees are writers, like novelists, screenwriters and journalists.</p>
+                                <div id="occupations"></div>
+                            </div>
+                            <div class="card-footer">
+                                <img class="data-badge" src="./assets/180px-Wikidata_Stamp_Rec_Light.svg.png" alt="Powered by Wikidata logo"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col mb-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h3 class="card-title">Interviewee languages</h3>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">All of Don Swaim's interviews are in English, but Wikidata reports that some of his interviewees have also written or speak other languages.</p>
+                                <div id="languages"></div>
+                            </div>
+                            <div class="card-footer">
+                                <img class="data-badge" src="./assets/180px-Wikidata_Stamp_Rec_Light.svg.png" alt="Powered by Wikidata logo"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col mb-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h3 class="card-title">Interviewee genders</h3>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">Wikidata reports that about 60% of Swaim's interviewees are male, 19% female and 22% unknown.</p>
+                                <div id="genders"></div>
+                            </div>
+                            <div class="card-footer">
+                                <img class="data-badge" src="./assets/180px-Wikidata_Stamp_Rec_Light.svg.png" alt="Powered by Wikidata logo"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col mb-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h3 class="card-title">Dates mentioned in <em>Book Beat</em> features</h3>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">See a table of every span of time mentioned in <em>Book Beat</em> as detected by a machine learning model (spaCy's <a href="https://spacy.io/models/en#en_core_web_sm">en_core_web_sm</a>).</p>
+                                <a href="https://versteeg-ou.github.io/digital-exhibit-sampler/book-beat-dates-mentioned-timeline_2020-05-22.html">
+                                    <img src="assets/dates-mentioned-thumbnail.png" alt="Table of dates"/>
+                                </a>
+                            </div>
+                            <div class="card-footer">
+                                <small>powered by <a href="https://spacy.io/" style="color: rgb(9, 163, 213)">spaCy</a></small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col mb-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h3 class="card-title">Places mentioned in <em>Book Beat</em> features</h3>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">See a Google map of every place mentioned in <em>Book Beat</em> as detected by a machine learning model (spaCy's <a href="https://spacy.io/models/en#en_core_web_sm">en_core_web_sm</a>).</p>
+                                <a href="https://www.google.com/maps/d/viewer?mid=1f3-idGQAMZ-EnZL1wUb2k7_pCNF80jIG">
+                                    <img src="assets/places-mentioned-thumbnail.png" alt="Map of place mentions"/>
+                                </a>
+                            </div>
+                            <div class="card-footer">
+                                <img class="data-badge" src="./assets/180px-Wikidata_Stamp_Rec_Light.svg.png" alt="Powered by Wikidata logo"/>
+                                &amp; <small><a href="https://spacy.io/" style="color: rgb(9, 163, 213)">spaCy</a></small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col mb-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h3 class="card-title">Interviewee awards</h3>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">See a network graph connecting interviewees and awards Wikidata reports they have won.</p>
+                                <a href="swaim-awards.html"><img src="assets/cytoscape-awards-thumbnail.png" alt="Cytoscape graph" /></a>
+                            </div>
+                            <div class="card-footer">
+                                <img class="data-badge" src="./assets/180px-Wikidata_Stamp_Rec_Light.svg.png" alt="Powered by Wikidata logo"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col mb-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h3 class="card-title">Collection data</h3>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">Download Don Swaim Collection metadata and transcripts for your own research.</p>
+                                <p style="font-size: 3em; text-align: center">🔬</p>
+                                <ul class="list-group">
+                                    <li class="list-group-item">📇 swaim-metadata.json</li>
+                                    <li class="list-group-item">📝 book-beat-transcripts.zip</li>
+                                    <li class="list-group-item">📝 interview-transcripts.zip</li>
+                                </ul>
+                            </div>
+                            <div class="card-footer"></div>
+                        </div>
+                    </div>
+
+                </div>
+                <p>Wikidata queried 2020-07-17</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</body>
+
+</html>

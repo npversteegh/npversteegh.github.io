@@ -1,0 +1,15 @@
+[
+  {
+    "labels": [
+      "male",
+      "female",
+      "unknown"
+    ],
+    "values": [
+      414,
+      128,
+      153
+    ],
+    "type": "pie"
+  }
+]

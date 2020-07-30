@@ -1,0 +1,50 @@
+[
+  {
+    "x": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      2,
+      3,
+      3,
+      5,
+      16,
+      34,
+      277,
+      388
+    ],
+    "y": [
+      "Afrikaans",
+      "Romanian",
+      "Hakka",
+      "Cantonese",
+      "Slovene",
+      "Polish",
+      "Welsh",
+      "Russian",
+      "Bengali",
+      "British English",
+      "Czech",
+      "Mandarin Chinese",
+      "German",
+      "Yiddish",
+      "Hebrew",
+      "Spanish",
+      "French",
+      "American English",
+      "Unknown",
+      "English"
+    ],
+    "type": "bar",
+    "orientation": "h"
+  }
+]
