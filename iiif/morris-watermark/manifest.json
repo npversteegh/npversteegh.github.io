@@ -1,0 +1,278 @@
+{
+    "@context": "http://iiif.io/api/presentation/2/context.json",
+    "@type": "sc:Manifest",
+    "@id": "https://cdm15808.contentdm.oclc.org/iiif/p15808coll19:3188/manifest",
+    "label": "Farfel leaf 204: Works of Chaucer, England, 1896",
+    "metadata": [{
+        "label": "Artist/ engraver - LCSH",
+        "value": "Burne-Jones, Edward Coley, 1833-1898"
+    }, {
+        "label": "Century",
+        "value": "19th century"
+    }, {
+        "label": "Collection contact",
+        "value": "Special Collections Librarian Miriam Intrator at https://www.ohio.edu/library/about/staff/intrator"
+    }, {
+        "label": "Collection",
+        "value": "Manuscript and Printed Leaves"
+    }, {
+        "label": "Subcollection",
+        "value": "Gilbert and Ursula Farfel collection of incunable and manuscript leaves"
+    }, {
+        "label": "Creation location - modern country",
+        "value": "England"
+    }, {
+        "label": "Creation location - modern city",
+        "value": "London (England)"
+    }, {
+        "label": "Creation date",
+        "value": "1896"
+    }, {
+        "label": "Author/ editor - LCSH",
+        "value": "Chaucer, Geoffrey, -1400"
+    }, {
+        "label": "Document genre - AAT",
+        "value": "Collected works"
+    }, {
+        "label": "Leaf identifier",
+        "value": "farfel-204"
+    }, {
+        "label": "Features - AAT",
+        "value": "Columns (layout features); Engravings (prints); Initials (layout features); Rubrics; Watermarks; Woodcuts (prints);"
+    }, {
+        "label": "Materials (substrate) - AAT",
+        "value": "Paper (fiber product)"
+    }, {
+        "label": "How to access this collection at the library",
+        "value": "https://www.ohio.edu/library/collections/archives-special-collections/rare-books"
+    }, {
+        "label": "Identifier",
+        "value": "farfel_b000_f00_204_chaucer_works_kelmscott"
+    }, {
+        "label": "Label",
+        "value": "GEOFFREY CHAUCER.\r\nThe works of Geoffrey Chaucer.\r\nHammersmith: William Morris,\r\n1896."
+    }, {
+        "label": "Primary language(s)",
+        "value": "English"
+    }, {
+        "label": "Policy",
+        "value": "See Ohio University Libraries' Digital Archival Collections Materials Selection and Rights policy at https://www.ohio.edu/library/about/policies-guidelines/digital-collections"
+    }, {
+        "label": "Previous owner",
+        "value": "Farfel, Gilbert; Farfel, Ursula"
+    }, {
+        "label": "Printer/ publisher - LCSH",
+        "value": "Kelmscott Press; Morris, William, 1834-1896"
+    }, {
+        "label": "Repository",
+        "value": "Ohio University Libraries. Mahn Center for Archives and Special Collections"
+    }, {
+        "label": "RightsStatements.org URI",
+        "value": "http://rightsstatements.org/vocab/NoC-US/1.0/"
+    }, {
+        "label": "Rights",
+        "value": "No copyright - United States"
+    }, {
+        "label": "Size",
+        "value": "41.6 cm x 28 cm"
+    }, {
+        "label": "Source title - LCSH",
+        "value": "Chaucer, Geoffrey, -1400. Works"
+    }, {
+        "label": "Title",
+        "value": "Farfel leaf 204: Works of Chaucer, England, 1896"
+    }, {
+        "label": "DC resource type",
+        "value": "text"
+    }, {
+        "label": "Watermark description",
+        "value": "Perch (fish)"
+    }, {
+        "label": "Repository",
+        "value": "Ohio University Libraries - Digital Archival Collections"
+    }, {
+        "label": "Source",
+        "value": "<span>From: <a href=\"https://media.library.ohio.edu/digital/collection/p15808coll19/id/3188\">Farfel leaf 204: Works of Chaucer, England, 1896</a></span>"
+    }],
+    "attribution": ["", "http://rightsstatements.org/vocab/NoC-US/1.0/", "", "No copyright - United States"],
+    "seeAlso": {
+        "@id": "https://cdm15808.contentdm.oclc.org/oai/oai.php?verb=GetRecord&identifier=oai:cdm15808.contentdm.oclc.org:p15808coll19/3188&metadataPrefix=oai_qdc",
+        "format": "application/xml",
+        "profile": "http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd"
+    },
+    "within": "https://cdm15808.contentdm.oclc.org/iiif/p15808coll19/manifest.json",
+    "sequences": [{
+        "@id": "https://cdm15808.contentdm.oclc.org/iiif/p15808coll19:3188/sequence/s0",
+        "@type": "sc:Sequence",
+        "label": "Farfel leaf 204: Works of Chaucer, England, 1896",
+        "canvases": [{
+            "@id": "https://cdm15808.contentdm.oclc.org/iiif/p15808coll19:3183/canvas/c0",
+            "@type": "sc:Canvas",
+            "label": "farfel_b000_f00_204_chaucer_works_kelmscott_r",
+            "images": [{
+                "@id": "https://cdm15808.contentdm.oclc.org/iiif/p15808coll19:3183/annotation/a0",
+                "@type": "oa:Annotation",
+                "motivation": "sc:painting",
+                "resource": {
+                    "@id": "https://cdm15808.contentdm.oclc.org/iiif/2/p15808coll19:3183/full/full/0/default.jpg",
+                    "@type": "dctypes:Image",
+                    "service": {
+                        "@context": "http://iiif.io/api/image/2/context.json",
+                        "@id": "https://cdm15808.contentdm.oclc.org/iiif/2/p15808coll19:3183",
+                        "width": 5990,
+                        "height": 8704,
+                        "tiles": [{
+                            "width": 5990,
+                            "scaleFactors": [1, 2, 4, 8, 16]
+                        }],
+                        "profile": "http://iiif.io/api/image/2/level1.json",
+                        "protocol": "http://iiif.io/api/image"
+                    },
+                    "format": "image/jpeg",
+                    "width": 5990,
+                    "height": 8704
+                },
+                "on": "https://cdm15808.contentdm.oclc.org/iiif/p15808coll19:3183/canvas/c0"
+            }],
+            "width": 5990,
+            "height": 8704
+        }, {
+            "@id": "https://cdm15808.contentdm.oclc.org/iiif/p15808coll19:3184/canvas/c1",
+            "@type": "sc:Canvas",
+            "label": "farfel_b000_f00_204_chaucer_works_kelmscott_v",
+            "images": [{
+                "@id": "https://cdm15808.contentdm.oclc.org/iiif/p15808coll19:3184/annotation/a1",
+                "@type": "oa:Annotation",
+                "motivation": "sc:painting",
+                "resource": {
+                    "@id": "https://cdm15808.contentdm.oclc.org/iiif/2/p15808coll19:3184/full/full/0/default.jpg",
+                    "@type": "dctypes:Image",
+                    "service": {
+                        "@context": "http://iiif.io/api/image/2/context.json",
+                        "@id": "https://cdm15808.contentdm.oclc.org/iiif/2/p15808coll19:3184",
+                        "width": 5965,
+                        "height": 8699,
+                        "tiles": [{
+                            "width": 5965,
+                            "scaleFactors": [1, 2, 4, 8, 16]
+                        }],
+                        "profile": "http://iiif.io/api/image/2/level1.json",
+                        "protocol": "http://iiif.io/api/image"
+                    },
+                    "format": "image/jpeg",
+                    "width": 5965,
+                    "height": 8699
+                },
+                "on": "https://cdm15808.contentdm.oclc.org/iiif/p15808coll19:3184/canvas/c1"
+            }],
+            "width": 5965,
+            "height": 8699
+        }, {
+            "@id": "https://cdm15808.contentdm.oclc.org/iiif/p15808coll19:3185/canvas/c2",
+            "@type": "sc:Canvas",
+            "label": "farfel_b000_f00_204_chaucer_works_kelmscott_w_r",
+            "images": [{
+                "@id": "https://cdm15808.contentdm.oclc.org/iiif/p15808coll19:3185/annotation/a2",
+                "@type": "oa:Annotation",
+                "motivation": "sc:painting",
+                "resource": {
+                    "@id": "https://cdm15808.contentdm.oclc.org/iiif/2/p15808coll19:3185/full/full/0/default.jpg",
+                    "@type": "dctypes:Image",
+                    "service": {
+                        "@context": "http://iiif.io/api/image/2/context.json",
+                        "@id": "https://cdm15808.contentdm.oclc.org/iiif/2/p15808coll19:3185",
+                        "width": 5846,
+                        "height": 8532,
+                        "tiles": [{
+                            "width": 5846,
+                            "scaleFactors": [1, 2, 4, 8, 16]
+                        }],
+                        "profile": "http://iiif.io/api/image/2/level1.json",
+                        "protocol": "http://iiif.io/api/image"
+                    },
+                    "format": "image/jpeg",
+                    "width": 5846,
+                    "height": 8532
+                },
+                "on": "https://cdm15808.contentdm.oclc.org/iiif/p15808coll19:3185/canvas/c2"
+            }],
+            "width": 5846,
+            "height": 8532
+        }, {
+            "@id": "https://cdm15808.contentdm.oclc.org/iiif/p15808coll19:3186/canvas/c3",
+            "@type": "sc:Canvas",
+            "label": "farfel_b000_f00_204_chaucer_works_kelmscott_w_r_e",
+            "images": [{
+                "@id": "https://cdm15808.contentdm.oclc.org/iiif/p15808coll19:3186/annotation/a3",
+                "@type": "oa:Annotation",
+                "motivation": "sc:painting",
+                "resource": {
+                    "@id": "https://cdm15808.contentdm.oclc.org/iiif/2/p15808coll19:3186/full/full/0/default.jpg",
+                    "@type": "dctypes:Image",
+                    "service": {
+                        "@context": "http://iiif.io/api/image/2/context.json",
+                        "@id": "https://cdm15808.contentdm.oclc.org/iiif/2/p15808coll19:3186",
+                        "width": 5846,
+                        "height": 8532,
+                        "tiles": [{
+                            "width": 5846,
+                            "scaleFactors": [1, 2, 4, 8, 16]
+                        }],
+                        "profile": "http://iiif.io/api/image/2/level1.json",
+                        "protocol": "http://iiif.io/api/image"
+                    },
+                    "format": "image/jpeg",
+                    "width": 5846,
+                    "height": 8532
+                },
+                "on": "https://cdm15808.contentdm.oclc.org/iiif/p15808coll19:3186/canvas/c3"
+            }],
+            "width": 5846,
+            "height": 8532,
+            "otherContent": [ {
+                "@id": "https://versteeg-ou.github.io/iiif/morris-watermark/61b6889370053fb798143e653ece919d.json",
+                "@type": "sc:AnnotationList",
+                "label": "William Morris' Carp watermark"
+            }]
+        }, {
+            "@id": "https://cdm15808.contentdm.oclc.org/iiif/p15808coll19:3187/canvas/c4",
+            "@type": "sc:Canvas",
+            "label": "farfel_b000_f00_204_chaucer_works_kelmscott_w_v",
+            "images": [{
+                "@id": "https://cdm15808.contentdm.oclc.org/iiif/p15808coll19:3187/annotation/a4",
+                "@type": "oa:Annotation",
+                "motivation": "sc:painting",
+                "resource": {
+                    "@id": "https://cdm15808.contentdm.oclc.org/iiif/2/p15808coll19:3187/full/full/0/default.jpg",
+                    "@type": "dctypes:Image",
+                    "service": {
+                        "@context": "http://iiif.io/api/image/2/context.json",
+                        "@id": "https://cdm15808.contentdm.oclc.org/iiif/2/p15808coll19:3187",
+                        "width": 5863,
+                        "height": 8532,
+                        "tiles": [{
+                            "width": 5863,
+                            "scaleFactors": [1, 2, 4, 8, 16]
+                        }],
+                        "profile": "http://iiif.io/api/image/2/level1.json",
+                        "protocol": "http://iiif.io/api/image"
+                    },
+                    "format": "image/jpeg",
+                    "width": 5863,
+                    "height": 8532
+                },
+                "on": "https://cdm15808.contentdm.oclc.org/iiif/p15808coll19:3187/canvas/c4"
+            }],
+            "width": 5863,
+            "height": 8532
+        }]
+    }],
+    "structures": [{
+        "@id": "https://cdm15808.contentdm.oclc.org/iiif/p15808coll19:3188/range/r0",
+        "@type": "sc:Range",
+        "label": "Farfel leaf 204: Works of Chaucer, England, 1896",
+        "ranges": [],
+        "canvases": ["https://cdm15808.contentdm.oclc.org/iiif/p15808coll19:3183/canvas/c0", "https://cdm15808.contentdm.oclc.org/iiif/p15808coll19:3184/canvas/c1", "https://cdm15808.contentdm.oclc.org/iiif/p15808coll19:3185/canvas/c2", "https://cdm15808.contentdm.oclc.org/iiif/p15808coll19:3186/canvas/c3", "https://cdm15808.contentdm.oclc.org/iiif/p15808coll19:3187/canvas/c4"],
+        "viewingHint": "top"
+    }]
+}

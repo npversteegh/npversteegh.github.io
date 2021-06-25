@@ -1,0 +1,38 @@
+{
+  "@type" : "sc:AnnotationList",
+  "resources" : [ {
+    "@id" : "http://localhost:8888/annotation/1624399222218",
+    "@type" : "oa:Annotation",
+    "dcterms:created" : "2021-06-22T18:00:22",
+    "dcterms:modified" : "2021-06-22T18:00:22",
+    "resource" : [ {
+      "@type" : "dctypes:Text",
+      "http://dev.llgc.org.uk/sas/full_text" : "William Morris' Perch watermark",
+      "format" : "text/html",
+      "chars" : "<p>William Morris' Perch watermark</p>"
+    } ],
+    "on" : [ {
+      "@type" : "oa:SpecificResource",
+      "within" : {
+        "@id" : "https://cdm15808.contentdm.oclc.org/iiif/p15808coll19:3188/manifest",
+        "@type" : "sc:Manifest"
+      },
+      "selector" : {
+        "@type" : "oa:Choice",
+        "default" : {
+          "@type" : "oa:FragmentSelector",
+          "value" : "xywh=2097,3909,1856,712"
+        },
+        "item" : {
+          "@type" : "oa:SvgSelector",
+          "value" : "<svg xmlns='http://www.w3.org/2000/svg'><path xmlns=\"http://www.w3.org/2000/svg\" d=\"M2097.36095,4297.2139l303.25644,28.30393l-20.2171,-121.30257l48.52103,-88.95522l88.95522,-48.52103l88.95522,-16.17368l137.47625,92.99864l72.78154,-117.25916l129.38941,-101.08548l185.99728,-16.17368h125.34599l177.91044,80.86838l-52.56445,190.0407l121.30257,88.95522l129.38941,101.08548l40.43419,60.65129l60.65129,-165.78019l20.2171,117.25916l198.12754,-181.95386l-88.95522,145.56309l-88.95522,60.65129l125.34599,121.30257h-165.78019l-92.99864,-20.2171l-133.43283,68.73813l-250.69199,-20.2171l-173.86702,-36.39077l-222.38805,52.56445l-194.08412,48.52103l-198.12754,-88.95522l-121.30257,-24.26051l-202.17096,64.69471l84.9118,-153.64993l-129.38941,-101.08548\" data-paper-data=\"{&quot;strokeWidth&quot;:1,&quot;editable&quot;:true,&quot;deleteIcon&quot;:null,&quot;annotation&quot;:null}\" id=\"rough_path_64146693-bbb0-4f76-9ade-16cfe9430ccd\" fill=\"none\" fill-rule=\"nonzero\" stroke=\"#00bfff\" stroke-width=\"1\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\" stroke-miterlimit=\"10\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" font-family=\"none\" font-weight=\"none\" font-size=\"none\" text-anchor=\"none\" style=\"mix-blend-mode: normal\"/></svg>"
+        }
+      },
+      "full" : "https://cdm15808.contentdm.oclc.org/iiif/p15808coll19:3186/canvas/c3"
+    } ],
+    "motivation" : [ "oa:commenting" ],
+    "@context" : "http://iiif.io/api/presentation/2/context.json"
+  } ],
+  "@id" : "http://localhost:8888/annotation/list/61b6889370053fb798143e653ece919d.json",
+  "@context" : "http://iiif.io/api/presentation/2/context.json"
+}
