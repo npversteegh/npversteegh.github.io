@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>artists-books-profile</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <link rel="stylesheet" href="pandoc.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h1 id="ohio-university-libraries&#39;-artists&#39;-books-collection-metadata-application-profile">Ohio University Libraries' artists' books collection metadata application profile</h1>
+<h2 id="introduction">Introduction</h2>
+<p>This Metadata Application Profile (MAP) is intended to guide cataloging of the artists' books collection at Ohio University Libraries' Alden Library. The artists' books collection is a collaboration between Ohio University' Fine Arts Library and the Mahn Center for Archives and Special Collections to build a collection of artists' books. Artists' books are works of art that use the form of the book, and often have material, technical, and other attributes that are of interest to researchers but are not accounted for in a standard MARC/RDA or AACR2 bibliographic record. This MAP is intended to provide a consistent way to provide access to these attributes.</p>
+<h2 id="instructions">Instructions</h2>
+<p>This MAP takes the form of a checklist with examples.</p>
+<ol>
+<li>Catalog the artists' book according to standard bibliographic practice.</li>
+<li>Enhance access to the record by ensuring that the MARC fields listed below are filled per their instructions.</li>
+</ol>
+<h2 id="glossary">Glossary</h2>
+<ul>
+<li><strong>AAT</strong>: The Getty Research Institute's <a href="https://www.getty.edu/research/tools/vocabularies/aat/">Art &amp; Architecture Thesaurus</a>, code <code>aat</code>.</li>
+<li><strong>LCGFT</strong>: the <a href="https://www.loc.gov/aba/publications/FreeLCGFT/freelcgft.html">Library of Congress Genre/Form Terms</a>, code <code>lcgft</code>.</li>
+<li><strong>RBMS Controlled Vocabularies</strong>: The ALA's Rare Book and Manuscripts Section's set of six <a href="http://rbms.info/vocabularies/index.shtml">controlled vocabularies</a>:
+<ul>
+<li>Binding Terms (code <code>rbbin</code>)</li>
+<li>Genre Terms (code <code>rbgenr</code>)</li>
+<li>Paper Terms (code <code>rbpap</code>)</li>
+<li>Printing &amp; Publishing Evidence (code <code>rbpri</code>)</li>
+<li>Provenance Evidence (code <code>rbprov</code>)</li>
+<li>Type Evidence (code <code>rbtyp</code>)</li>
+</ul></li>
+<li><strong>ABT</strong>: the <a href="http://allisonjai.com/abt/vocab/index.php">Artists' Books Thesaurus</a></li>
+</ul>
+<h2 id="fields">Fields</h2>
+<h3 id="007-physical-description-fixed-field"><code>007</code> Physical Description Fixed Field</h3>
+<h3 id="050-library-of-congress-call-number"><code>050</code> Library of Congress Call Number</h3>
+<ul>
+<li>If by an artist or a collective working under a single name, class into <code>N7433.4.A-Z</code> <em>Visual arts -- Miscellaneous genres and media, not limited by time period, style, place, or subject matter -- Artists' books -- Special artists, A-Z</em>, under each artist. Remember if Cuttering an initial number to translate A12-19 up to A7.</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Cutter</th>
+<th>Caption</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>.xA2</td>
+<td>Autobiography. By date</td>
+</tr>
+<tr class="even">
+<td>.xA3</td>
+<td>Letters. By date</td>
+</tr>
+<tr class="odd">
+<td>.xA35</td>
+<td>Speeches, essays, interviews, etc. of the artist. By date</td>
+</tr>
+<tr class="even">
+<td>.xA4</td>
+<td>Exhibition catalogs. By date</td>
+</tr>
+<tr class="odd">
+<td>.xA7-.xZ6</td>
+<td>Individual artists' books. By title, A-Z</td>
+</tr>
+<tr class="even">
+<td>.xZ7-.xZ99</td>
+<td>Biography and criticism</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>If not by an individual artist but multiple artists associated with country or multiple countries, class into <code>N7433.35.A-Z</code> <em>Visual arts -- Miscellaneous genres and media, not limited by time period, style, place, or subject matter -- Artists' books -- Special regions or countries, A-Z</em></li>
+</ul>
+<h3 id="100-main-entry--personal-name"><code>100</code> Main Entry--Personal Name</h3>
+<ul>
+<li>Record RDA creator role in subfield <code>ǂe</code>, frequently <code>book artist</code>.</li>
+</ul>
+<blockquote>
+<p><code>100 1_ Barton, Carol June, ǂd 1954- ǂe book artist.</code></p>
+</blockquote>
+<blockquote>
+<p><code>100 1_ Past, Ambar, ǂe author, ǂe book artist.</code></p>
+</blockquote>
+<h3 id="264-production,-publication,-distribution,-manufacture,-and-copyright-notice"><code>264</code> Production, Publication, Distribution, Manufacture, and Copyright Notice</h3>
+<ul>
+<li>Record statements related to the &quot;printing, duplicating, casting, etc&quot; in 264 _3 and 7XX.</li>
+</ul>
+<blockquote>
+<p><code>264 _3 Milwaukee, WI : ǂb Fox Printing Company</code></p>
+</blockquote>
+<blockquote>
+<p><code>710 2_ Fox Printing Company, ǂe printer.</code></p>
+</blockquote>
+<h3 id="300-physical-description"><code>300</code> Physical Description</h3>
+<ul>
+<li><p>Follow RDA instruction 3.4.1.3 Recording Extent</p></li>
+<li><p>Follow RDA instruction 7.15 Illustrative Content, using one or more of the below terms in singular or plural, or &quot;[i]f none of the terms in the list is appropriate or sufficiently specific, use another concise term or terms (e.g., chart, music) to indicate the type of an illustrative content.&quot; Also &quot;record details of illustrative content if considered important for identification or selection&quot;, e.g. &quot;Map of Australia on endpapers&quot;.</p>
+<ul>
+<li><code>coat of arms</code></li>
+<li><code>facsimile</code></li>
+<li><code>form</code></li>
+<li><code>genealogical table</code></li>
+<li><code>graph</code></li>
+<li><code>illumination</code></li>
+<li><code>illustration</code></li>
+<li><code>map</code></li>
+<li><code>photograph</code></li>
+<li><code>plan</code></li>
+<li><code>portrait</code></li>
+<li><code>sample</code></li>
+</ul></li>
+<li><p>Record the dimensions of the artists' book as it sits on the shelf in subfield <code>ǂc</code> in the from of height by width by depth in centimeters separated by <code>x</code> as if it were a box.</p></li>
+</ul>
+<blockquote>
+<p><code>300 __ 12 unnumbered pages : ǂb illustrations ; ǂc 23 x 13 cm + ǂe [6] illustrated cards</code></p>
+</blockquote>
+<ul>
+<li>Note any accompanying materials in <code>e</code> <!-- Should boxes, bags etc. be thought of as accompanying materials? Other catalogers to not seem to record boxes in ‡e. --></li>
+</ul>
+<blockquote>
+<p><code>300 __ 121 pages : ǂb illustrations (some color) ; ǂc 28 cm + ǂe 8 postcards</code></p>
+</blockquote>
+<h3 id="340-physical-medium"><code>340</code> Physical Medium</h3>
+<ul>
+<li>Field <code>340</code> records physical attributes, apparently especially for notated music and audio carriers, though it seems to support art objects and some types of books. Use repeated fields for each unique term.</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Subfield</th>
+<th>Subfield Name</th>
+<th><code>ǂ2</code></th>
+<th>RDA Vocabulary</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ǂa</td>
+<td>Material base and configuration</td>
+<td>rdamat</td>
+<td><a href="http://www.rdaregistry.info/termList/RDAMaterial/">RDA Material</a></td>
+</tr>
+<tr class="even">
+<td>ǂb</td>
+<td>Dimensions</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>ǂc</td>
+<td>Material applied to surface</td>
+<td>rdamat</td>
+<td><a href="http://www.rdaregistry.info/termList/RDAMaterial/">RDA Material</a></td>
+</tr>
+<tr class="even">
+<td>ǂd</td>
+<td>Information recording technique</td>
+<td>rdapm</td>
+<td><a href="http://www.rdaregistry.info/termList/RDAproductionMethod/">RDA Production Method</a></td>
+</tr>
+<tr class="odd">
+<td>ǂe</td>
+<td>Support</td>
+<td>rdamat</td>
+<td><a href="http://www.rdaregistry.info/termList/RDAMaterial/">RDA Material</a></td>
+</tr>
+<tr class="even">
+<td>ǂf</td>
+<td>Production rate/ratio</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>ǂg</td>
+<td>Color content</td>
+<td>rdacc</td>
+<td><a href="https://www.rdaregistry.info/termList/RDAColourContent/">RDA Colour Content</a></td>
+</tr>
+<tr class="even">
+<td>ǂh</td>
+<td>Location within medium</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>ǂi</td>
+<td>Technical specifications of medium</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>ǂj</td>
+<td>Generation</td>
+<td>rdagen</td>
+<td><a href="http://www.rdaregistry.info/termList/RDAGeneration/">RDA Generation</a></td>
+</tr>
+<tr class="odd">
+<td>ǂk</td>
+<td>Layout</td>
+<td>rdalay</td>
+<td><a href="http://www.rdaregistry.info/termList/layout/">RDA Layout</a></td>
+</tr>
+<tr class="even">
+<td>ǂm</td>
+<td>Book format</td>
+<td>rdabf</td>
+<td><a href="http://www.rdaregistry.info/termList/bookFormat/">RDA Bibliographic Format</a></td>
+</tr>
+<tr class="odd">
+<td>ǂn</td>
+<td>Font size</td>
+<td>rdafs</td>
+<td><a href="http://www.rdaregistry.info/termList/fontSize/">RDA Font Size</a></td>
+</tr>
+<tr class="even">
+<td>ǂo</td>
+<td>Polarity</td>
+<td>rdapo</td>
+<td><a href="http://www.rdaregistry.info/termList/RDAPolarity/">RDA Polarity</a></td>
+</tr>
+<tr class="odd">
+<td>ǂ3</td>
+<td>Materials specified</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="338-carrier-type"><code>338</code> Carrier Type</h3>
+<ul>
+<li>Record in <code>338</code> the format of the storage medium, housing and media type as an addition or supplement to 007 ǂb using an <a href="https://www.rdaregistry.info/termList/RDACarrierType/">RDA Carrier Type</a> from the <a href="http://www.loc.gov/standards/valuelist/rdacarrier.html">Term and Code List for RDA Carrier Types</a>. Carrier types most relevant to artists' books are:
+<ul>
+<li><a href="http://www.rdaregistry.info/termList/RDACarrierType/1045">card</a>: &quot;A carrier type that consists of a small sheet of opaque material.&quot;</li>
+<li><a href="http://rdaregistry.info/termList/RDACarrierType/1059">object</a>: &quot;A carrier type that consists of a three-dimensional artifact, a replica of an artifact, or a naturally-occurring object.&quot;</li>
+<li><a href="http://rdaregistry.info/termList/RDACarrierType/1047">roll</a>: &quot;A carrier type that consists of a wound length of paper, film, tape, etc.&quot;</li>
+<li><a href="http://rdaregistry.info/termList/RDACarrierType/1048">sheet</a>: &quot;A carrier type that consists of a flat, thin piece of paper, plastic, etc.&quot;</li>
+<li><a href="http://rdaregistry.info/termList/RDACarrierType/1049">volume</a>: &quot;A carrier type that consists of one or more sheets bound or fastened together to form a single unit.&quot;</li>
+</ul></li>
+</ul>
+<h3 id="386-creator/contributor-characteristics"><code>386</code> Creator/Contributor Characteristics</h3>
+<h3 id="500-general-note"><code>500</code> General Note</h3>
+<ul>
+<li>Record a summary of the construction of the artists' book taken from the book, publisher, or seller's description, or if none exists supply one.</li>
+</ul>
+<h3 id="520-summary,-etc"><code>520</code> Summary, Etc</h3>
+<h3 id="563-binding-information"><code>563</code> Binding Information</h3>
+<ul>
+<li>Record in <code>563</code> information about binding if it is provided in free text with <code>ǂ5 OAU</code> to identify Ohio University as the institution.</li>
+</ul>
+<h3 id="590-local-note"><code>590</code> Local Note</h3>
+<ul>
+<li>Record edition numbers and author's signatures in this field using the formula <em>Ohio University Libraries copy is number</em> X <em>of</em> Y [<em>and is signed by the artist</em>].</li>
+</ul>
+<blockquote>
+<p><code>590 __ Ohio University Libraries copy is number 9 of 500 and is signed by the artist.</code></p>
+</blockquote>
+<blockquote>
+<p><code>590 __ Ohio University Libraries copy is number 6 of 25.</code></p>
+</blockquote>
+<blockquote>
+<p><code>590 __ Ohio University Libraries copy is signed by the artist.</code></p>
+</blockquote>
+<blockquote>
+<p><code>590 __ Ohio University Libraries copy is an artists' proof and is signed by the artist.</code></p>
+</blockquote>
+<!-- Should there be a formula for unique, one-of-a-kind books? 
+     Should this really be in the bib record? What if there are two copies? -->
+
+<ul>
+<li>Record item-specific information about the Libraries' copies.</li>
+</ul>
+<blockquote>
+<p><code>590 __ Ohio University Libraries copy lacks velcro closure.</code></p>
+</blockquote>
+<h3 id="650-subject-added-entry--topical-term"><code>650</code> Subject Added Entry--Topical Term</h3>
+<ul>
+<li>Remove <code>650 __ Artists' books ǂv Specimens</code> (replaced with LCGFT <code>Artists' books</code> in <code>655</code>).</li>
+<li>Is <code>[Topic] in art</code> the correct 650 heading, or should it just be the topic (e.g. is the book about <code>Racism in art</code> or more generally about <code>Racism</code>?)</li>
+</ul>
+<h3 id="655-index-term--genre/form"><code>655</code> Index Term--Genre/Form</h3>
+<ol>
+<li>Record all aspects of the artists' book covered by LCGFT using LCGFT terms. Use 2nd indicator <code>7</code> and subfield <code>ǂ2 lcgft</code>. All artists books should receive <code>655 _7 Artists' books. ǂ2 lcgft</code>.</li>
+<li>Record all aspects of the artists' book not covered by LCGFT using AAT terms. Use 2nd indicator <code>7</code> and subfield <code>ǂ2 aat</code>.</li>
+<li>Record all aspects of the artists' book not covered by LCGFT and AAT using the RBMS Controlled Vocabularies terms. Use 2nd indicator <code>7</code> and the appropriate subfield <code>ǂ2</code> code.</li>
+<li>Record all aspects of the artists' book not covered by LCGFT, AAT, and the RBMS vocabularies using ABT. Use 2nd indicator <code>7</code>, with subfield <code>ǂ2 local</code>.</li>
+</ol>
+<!-- Should 650 Artists' books |v Specimens and 655 7 Artists' books |z [geographic subheadings] |y [year] just be kept for harmless backward compatibility? 3x headings saying almost the same thing. Consistency the main priority. -->
+
+<h3 id="700-added-entry--personal-name"><code>700</code> Added Entry--Personal Name</h3>
+<ul>
+<li>Common RDA contributor (I.2-3) roles to check for in colophons:
+<ul>
+<li><code>book designer</code></li>
+<li><code>illustrator</code></li>
+<li><code>printer</code></li>
+<li><code>printmaker</code></li>
+<li><code>lithographer</code></li>
+<li><code>binder</code></li>
+</ul></li>
+</ul>
+<h3 id="710-added-entry--corporate-name"><code>710</code> Added Entry--Corporate Name</h3>
+<ul>
+<li>Record the publisher of the artists' book.</li>
+</ul>
+<h3 id="752-added-entry--hierarchical-place-name"><code>752</code> Added Entry--Hierarchical Place Name</h3>
+<!-- "A hierarchical form of geographic name. Use field 752 to relate a hierarchical form of place name to a particular attribute (e.g., the name of the community served by a newspaper or the place of publication or printing of a rare book)." -->
+
+<h2 id="deprecated-fields">Deprecated Fields</h2>
+<h3 id="562-copy-and-version-identification-note"><code>562</code> Copy and Version Identification Note</h3>
+<p>The <code>562</code> field is designated for use by archives and manuscript repositories, not for published materials.</p>
+<h3 id="586-awards-note"><code>586</code> Awards Note</h3>
+<p>Record any awards the artists' book has won in the 586.</p>
+<h3 id="654-subject-added-entry--faceted-topical-terms"><code>654</code> Subject Added Entry--Faceted Topical Terms</h3>
+<p>This field seems to have been devised for AAT faceting, but does not seem to be well documented, used or supported by most OPACs.</p>
+<h3 id="653-index-term--uncontrolled"><code>653</code> Index Term--Uncontrolled</h3>
+<h3 id="655-_4-index-term--genre/form"><code>655 _4</code> Index Term--Genre/Form</h3>
+<p>The <code>655</code> field with 2nd indicator <code>4</code> is not loaded or indexed by ALICE.</p>
+<h2 id="vocabularies">Vocabularies</h2>
+<p>There are sometimes several terms in a vocabulary that might be applied to an attribute of a book. This section indicates what choices have been made in the past so that similar attributes can be grouped under a common heading instead of being divided into several overlapping terms.</p>
+<h3 id="library-of-congress-subject-headings-(lcsh)">Library of Congress Subject Headings (LCSH)</h3>
+<p>Frequently used LCSH terms and subdivisions include:</p>
+<ul>
+<li><a href="http://id.loc.gov/authorities/subjects/sh99002090">--Portraits</a> for works <em>about</em> portraits of persons, ethnic groups and classes and <a href="http://id.loc.gov/authorities/subjects/sh85105182">--Portraits</a> for works <em>consisting of</em> portraits of persons, ethnic groups and classes.</li>
+</ul>
+<h3 id="library-of-congress-genre/form-terms-(lcgft)">Library of Congress Genre/Form Terms (LCGFT)</h3>
+<p>LCGFT headings for common book attributes:</p>
+<ul>
+<li><a href="http://id.loc.gov/authorities/genreForms/gf2017027220">Artists' books</a> is required for every book in the artists' books collection.</li>
+<li><a href="http://id.loc.gov/authorities/genreForms/gf2017027223">Book objects</a> may be added in addition to <code>Artists' books</code> to help distinguish books that are strongly sculptural.</li>
+<li><a href="http://id.loc.gov/authorities/genreForms/gf2014026098">Exhibition catalogs</a> for books that document an exhibition, together with <code>Cont</code> <code>c</code> and 650 subheading <code>ǂv Exhibition</code>.</li>
+<li><a href="http://id.loc.gov/authorities/genreForms/gf2014026104">Flag books</a> for books &quot;that consist of rows of tabs of paper attached to an accordion-folded spine&quot;.</li>
+<li><a href="http://id.loc.gov/authorities/genreForms/gf2014026144">Photobooks</a> is used for books that are primarily books of photographs, often associated with the TR class.</li>
+<li><a href="http://id.loc.gov/authorities/genreForms/gf2014026151">Postcards</a> for books with postcards inserted.</li>
+<li><a href="http://id.loc.gov/authorities/genreForms/gf2017027269">Woodcuts</a> for prints made from carved wood blocks.</li>
+</ul>
+<h3 id="art-and-architecture-thesaurus-(aat)">Art and Architecture Thesaurus (AAT)</h3>
+<p>AAT frequently has several headings that seem similar but differ in facet (e.g. a process and a material) and it is easy to miss NT. AAT headings for common book attributes:</p>
+<ul>
+<li><a href="http://vocab.getty.edu/page/aat/300417532">accordian folding</a> (sic) for accordion books, instead of <a href="https://rbms.info/vocabularies/binding/tr1.htm">Accordion fold format</a> from RBMS.</li>
+<li><a href="http://vocab.getty.edu/page/aat/300202819">boards (binding components)</a> for use of boards without cloth. <!-- ? --></li>
+<li><a href="http://vocab.getty.edu/page/aat/300195133">book jackets</a> for books with book jackets.</li>
+<li><a href="http://vocab.getty.edu/page/aat/300235760">bookmarks</a> has been used for books with bookmarks.</li>
+<li><a href="http://vocab.getty.edu/page/aat/300045643">boxes (containers)</a> has been used for books provided in boxes. There is a special term for <a href="http://vocab.getty.edu/page/aat/300422132">book slipcase</a>, and RBMS has <code>Clamshell boxes</code>. See also <code>cases (containers)</code>.</li>
+<li><a href="http://vocab.getty.edu/page/aat/300045659">cases (containers)</a> see also <code>boxes (containers)</code>.</li>
+<li><a href="http://vocab.getty.edu/page/aat/300417761">cloth bindings (bookbindings)</a> for hardcover books. See also <a href="http://vocab.getty.edu/page/aat/300417814">pictorial cloth bindings</a> and <a href="http://vocab.getty.edu/page/aat/300417789">publishers' cloth bindings</a>.</li>
+<li><a href="http://vocab.getty.edu/page/aat/300387428">colored paper</a> for books made with multiple colors of paper.</li>
+<li><a href="http://vocab.getty.edu/page/aat/300263587">Coptic bindings</a> note that the C is capitalized.</li>
+<li><a href="http://vocab.getty.edu/page/aat/300257411">cutouts</a> for works using paper cutouts or cut paper instead of <a href="http://vocab.getty.edu/page/aat/300068579">cut-paper work</a>. <!-- Change 3x AAT cut-paper work in ALICE to cutouts? --></li>
+<li><a href="http://vocab.getty.edu/page/aat/300265580">decorated papers</a> for books with decorated endpapers.</li>
+<li><a href="http://vocab.getty.edu/page/aat/300379073">foil stamping</a> is often referenced in publishers' descriptions as foil or stamping</li>
+<li><a href="http://vocab.getty.edu/page/aat/300015577">foldouts</a> for &quot;[o]versized pages in a book, magazine, or atlas which must be unfolded to be viewed&quot;.</li>
+<li><a href="http://vocab.getty.edu/page/aat/300411543">handmade paper</a> for &quot;[p]aper made without the use of industrial machinery&quot;.</li>
+<li><a href="http://vocab.getty.edu/page/aat/300235748">inkjet printing</a> instead of <a href="http://vocab.getty.edu/page/aat/300265621">inkjet prints</a>.</li>
+<li><a href="http://vocab.getty.edu/page/aat/300254422">laser printing</a> instead of <a href="http://vocab.getty.edu/page/aat/300312248">laser prints</a>.</li>
+<li><a href="http://vocab.getty.edu/page/aat/300178926">letterpress printing</a> for letterpress printed books.</li>
+<li><a href="http://vocab.getty.edu/page/aat/300041393">linocuts (prints)</a> for linoleum block printing.</li>
+<li><a href="http://vocab.getty.edu/page/aat/300211436">panel stamp bindings</a> instead of RBMS <code>Blocked bindings</code> and <code>Panel-stamped bindings</code>.</li>
+<li><a href="http://vocab.getty.edu/page/aat/300211475">perfect bindings (gathered matter components)</a> has been preferred to <a href="http://vocab.getty.edu/page/aat/300202271">perfect binding (process)</a> for books that have perfect bindings.</li>
+<li><a href="http://vocab.getty.edu/page/aat/300136847">photocopies</a> instead of LCGFT Facsimiles, which has a UF Photocopies.</li>
+<li><a href="http://vocab.getty.edu/page/aat/300053281">screen printing</a> has been used for silkscreen and screen printed materials (as against <a href="http://vocab.getty.edu/page/aat/300178688">screen prints</a>).</li>
+<li><a href="http://vocab.getty.edu/page/aat/300207643">shaped books</a> for books shaped otherwise than rectangles.</li>
+<li><a href="http://vocab.getty.edu/page/aat/300418002">sleeves (object genre)</a> for &quot;close-fitting protective covers or cases [with] a slit or opening at one or two edges or sides&quot;.</li>
+<li><a href="http://vocab.getty.edu/page/aat/300200341">slipcases</a> is preferred to <a href="http://vocab.getty.edu/page/aat/300422132">book slipcase</a>, which is somehow a &quot;document genre&quot; instead of being a container.</li>
+<li><a href="http://vocab.getty.edu/page/aat/300263000">spiral bindings</a> for spiral bound works. See RBMS <code>Comb bindings</code> for books that use prongs instead of a bent wire.</li>
+<li><a href="http://vocab.getty.edu/page/aat/300375674">staple bindings</a> for works with leaves stapled together.</li>
+<li><a href="http://vocab.getty.edu/page/aat/300250699">vellum (paper)</a> for the use of vellum paper.</li>
+<li><a href="http://vocab.getty.edu/page/aat/300211392">wrappers (book covers)</a> <!-- what about "attached" in the scope note? --></li>
+</ul>
+<h4 id="deprecated-aat-headings">Deprecated AAT headings</h4>
+<ul>
+<li>Instead of <a href="http://vocab.getty.edu/page/aat/300190463">book objects</a> for artworks that make use of the book format but do not communicate as books, and <a href="http://vocab.getty.edu/page/aat/300178842">bookworks</a> for works the exploit the book form or focus on the fine crafting of the book, use LCGFT <code>Artists' books</code> and LCGFT <code>Book objects</code> (see LCGFT note above).</li>
+</ul>
+<h3 id="rbms-controlled-vocabularies">RBMS Controlled Vocabularies</h3>
+<h4 id="binding-terms">Binding Terms</h4>
+<ul>
+<li><a href="https://rbms.info/vocabularies/binding/tr459.htm">Clamshell boxes</a> &quot;for box structures that include two three-sided trays (one made to fit inside the other when closed) attached to a case&quot;.</li>
+<li><a href="http://rbms.info/vocabularies/binding/tr451.htm">Comb bindings</a> instead of spiral bindings when curved prongs rather than a single wire bind together a book through a series of holes.</li>
+<li><a href="https://rbms.info/vocabularies/binding/tr112.htm">Decorated paper bindings</a> for books with decorated pastedowns or endpapers (?). <!-- What about AAT decorated papers? --></li>
+</ul>
+<h4 id="paper-terms">Paper Terms</h4>
+<ul>
+<li><a href="https://rbms.info/vocabularies/paper/tr277.htm">Paper evidence</a> can be subdivided to identify paper features not otherwise classified, as <code>655 _7 Paper evidence (Paper) ǂx Epson Premium Presentation. ǂ2 rbpap</code>.</li>
+</ul>
+<h4 id="type-terms">Type Terms</h4>
+<ul>
+<li><a href="https://rbms.info/vocabularies/type/tr157.htm">Typefaces</a> can be subdivided with an identifiable typeface, as <code>655 _7 Typefaces (Type evidence) ǂx Baskerville. ǂ2 rbtyp</code>. <!-- This has been inconsistently applied, is it worth it? --></li>
+</ul>
+<h3 id="artists&#39;-books-thesaurus-(abt)">Artists' Books Thesaurus (ABT)</h3>
+<p>The ABT overlaps with LCGFT and AAT, but contains some headings both omit. It is not well supported in MARC, having no code that validates in 655 subfield ǂ2; 655 _7 with subfields <code>ǂ2 local</code> should be used instead.</p>
+<ul>
+<li><a href="http://allisonjai.com/abt/vocab/index.php?tema=125&amp;/lift-the-flap-books">Lift-the-flap books</a> for books with &quot;flaps that lift up to reveal hidden content&quot;.</li>
+<li><a href="http://allisonjai.com/abt/vocab/index.php?tema=140&amp;/miniature-books">Miniature books</a> for &quot;[b]ooks no larger than three inches in height, width, or thickness&quot;.</li>
+<li><a href="http://allisonjai.com/abt/vocab/index.php?tema=232&amp;/piano-hinge-bindings">Piano hinge bindings</a> for bindings in which &quot;skewers are woven through and connect notched signatures&quot;.</li>
+<li><a href="http://allisonjai.com/abt/vocab/index.php?tema=238&amp;/risographs">Risographs</a> for books printed using a <a href="https://en.wikipedia.org/wiki/Risograph">Risograph</a> printer.</li>
+<li><a href="http://allisonjai.com/abt/vocab/index.php?tema=32&amp;/stab-bindings">Stab bindings</a> for &quot;[b]indings in which the entire thickness of a text block is sewn through stabbed holes&quot;.</li>
+</ul>
+<h2 id="item-records">Item Records</h2>
+<h3 id="special-collections">Special Collections</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Location Code</th>
+<th>Label prefix</th>
+<th>ITYPE</th>
+<th>Status</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>aar</td>
+<td>Spec Coll Gen Rare</td>
+<td>1</td>
+<td>a</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>aarov</td>
+<td>Spec Coll Oversize</td>
+<td>1</td>
+<td>a</td>
+<td>Usually ≥30cm</td>
+</tr>
+</tbody>
+</table>
+<h3 id="fine-arts">Fine Arts</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Location Code</th>
+<th>Label prefix</th>
+<th>ITYPE</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>aartg</td>
+<td>Arts Limited Access</td>
+<td>1</td>
+<td>a</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
