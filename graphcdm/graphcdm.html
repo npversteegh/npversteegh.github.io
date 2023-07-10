@@ -1,0 +1,529 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>graphcdm</title>
+        <meta name="viewport" content="with=device-width, initial-scale=1">
+        <style>
+         .container header {
+             position: absolute;
+             left: 0.5em;
+             top: 0.5em;
+             background-color: white;
+             padding: 0.5em;
+             border: thin black solid;
+             width: 15em;
+             z-index: 2;
+         }
+         .container header h1 {
+             margin: 0 0 0.5em 0;
+             font-family: Garamond, sans-serif;
+         }
+         .container header h2 {
+             font-size: 1em;
+             margin: 0 0 0.3em 0;
+             font-family: Garamond, sans-serif;
+         }
+         .container header form {
+             margin: 0.5em 0 0.5em 0;
+         }
+         .container header form p {
+             margin: 0.3em 0 0.3em 0;
+         }
+         .container header form legend {
+             font-family: sans-serif;
+         }
+         #cy {
+             position: absolute;
+             left: 0;
+             top: 0;
+             bottom: 0;
+             right: 0;
+             z-index: 1;
+             background-color: azure;
+         }
+         .search-log-container {
+             max-height: 12em;
+             overflow-y: scroll;
+         }
+         .search-index {
+             font-family: monospace;
+         }
+         .search-term {
+             font-family: monospace;
+             background-color: gainsboro;
+         }
+         #search-query {
+             width: 95%;
+         }
+         select, input {
+             width: 15em;
+         }
+        </style>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.24.0/cytoscape.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>graphcdm</h1>
+                <form id="search">
+                    <fieldset>
+                        <legend>Search a CONTENTdm</legend>
+                        <p>
+                            <label for="instance-url">CONTENTdm instance URL</label><br>
+                            <input type="text" id="instance-url" name="instanceUrl" value="https://cdm15808.contentdm.oclc.org" tabindex="1" />
+                        </p>
+                        <p><button type="button" onClick="listCollections()">List Collections</button></p>
+                        <p>
+                            <label for="collection-list">Collections</label><br>
+                            <select id="collection-list" name="collectionList" onChange="listFields()"></select>
+                        </p>
+                        <p>
+                            <label for="field-list">Collection Vocab Fields</label><br>
+                            <select id="field-list" name="fieldList" onChange="listVocab()"></select>
+                        </p>
+                        <p>
+                            <label for="vocab-list">Vocabulary Terms</label><br>
+                            <select id="vocab-list"></select>
+                        </p>
+                        <p>
+                            <button type="button" onClick="graphSearch()">Add Search</button>
+                            <button type="button" onClick="clearGraph()">Clear Graph</button>
+                        </p>
+                    </fieldset>
+                </form>
+                <form id="browsing-settings" onSubmit="return browsingSettings();">
+                    <fieldset>
+                        <legend>Graph display settings</legend>
+                        <p>
+                            <label for="generations">Show Generations</label>
+                            <select id="generations" name="generations">
+                                <option value="all">All</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </p>
+                        <p>
+                            <label for="global-layout">Layout</label>
+                            <select id="global-layout" name="globalLayout">
+                                <option value="concentric">Concentric</option>
+                                <option value="cose">COSE</option>
+                                <option value="breadthfirstTopDown">Breadthfirst (top-down)</option>
+                                <option value="breadthfirstCircle">Breadthfirst (circle)</option>
+                            </select>
+                        </p>
+                        <p>
+                            <label for="tilt-labels">Tilt Labels</label>
+                            <input type="checkbox" id="tilt-labels" name="tiltLabels" unchecked>
+                        </p>
+                        <p><button type="submit">Redraw</button></p>
+                    </fieldset>
+                </form>
+                <h2>Search Log</h2>
+                <div class="search-log-container">
+                    <dl id="search-log"></dl>
+                </div>
+            </header>
+            <div id="cy"></div>
+        </div>
+        <script>
+         "use strict";
+         let titleFieldNickname = undefined;
+         let currentSearchGeneration = 0;
+         let generationLimit = document.getElementById("generations").value;
+         const layoutOptionsOptions = {
+             cose: {
+                 name: "cose",
+                 nodeDimensionsIncludeLabels: true, // default false
+                 /* padding: 30, // default 30
+                  * componentSpacing: 40, // default 40
+                  * nodeRepulson: 2048, // default 2048
+                  * idealEdgeLength: 32, // default 32 */
+                 edgeElasticity: 20, // default 32
+             },
+             circle: {
+                 name: "circle",
+             },
+             concentric: {
+                 name: "concentric",
+             },
+             breadthfirstTopDown: {
+                 name: "breadthfirst",
+                 circle: false,
+             },
+             breadthfirstCircle: {
+                 name: "breadthfirst",
+                 circle: true,
+             },
+         };
+         let layoutOptions = layoutOptionsOptions[document.getElementById("global-layout").value];
+         const cytoscapeStyle = [
+             {
+                 selector: "node",
+                 style: {
+                     "label": "data(label)",
+                     "text-valign": "center",
+                     "text-halign": "center",
+                     "text-wrap": "wrap",
+                     "text-max-width": 600,
+                     "text-outline-color": "white",
+                     "text-outline-width": 2,
+                 },
+             },
+             {
+                 selector: "edge",
+                 style: {
+                     "curve-style": "bezier",
+                     "target-arrow-shape": "triangle",
+                     "arrow-scale": "1.3",
+                 }
+             },
+             {
+                 selector: "node[ntype = 'subject']",
+                 style: {
+                     "shape": "ellipse",
+                     "background-color": "gold",
+                     "background-opacity": 0.7,
+                     "font-family": "Courier, monospace",
+                 }
+             },
+             {
+                 selector: "node[ntype = 'item']",
+                 style: {
+                     "height": 42,
+                     "width": 42,
+                     "background-fit": "cover",
+                     "shape": "rectangle",
+                     "background-color": "forestgreen",
+                     "background-opacity": 0.7,
+                     "text-justification": "left",
+                 }
+             },
+             {
+                 selector: "node[iiif]",
+                 style: {
+                     "background-image": "data(iiif)",
+                 }
+             },
+             {
+                 selector: ".searched",
+                 style: {
+                     "background-color": "darkviolet",
+                 }
+             },
+             {
+                 selector: ".tilt-label",
+                 style: {
+                     "text-rotation": -0.209439510239,  // -12 degrees in radians
+                 }
+             },
+             {
+                 selector: ".trace-neighbors",
+                 style: {
+                     "border-width": "3",
+                     // "border-style": "dashed",
+                     "border-color": "blue",
+                     // "line-style": "dashed",
+                     "line-color": "blue",
+                     "target-arrow-color": "blue",
+                 }
+             },
+             {
+                 selector: ".foreground",
+                 style: {
+                     "z-index": 3,
+                 }
+             },
+             {
+                 selector: ".box-text",
+                 style: {
+                     "text-background-opacity": 0.8,
+                     "text-background-color": "white",
+                     "text-background-padding": "3px",
+                     "text-border-opacity": "1.0",
+                     "text-border-style": "solid",
+                     "text-border-color": "blue",
+                     "text-border-width": "2px",
+                     "text-outline-width": "0px",
+                 }
+             }
+         ];
+
+         const cy = cytoscape({
+             container: document.getElementById("cy"),
+             style: cytoscapeStyle,
+         });
+
+         function addNodesFromSearch(instanceUrl, collectionAlias, fieldNickname, searchTerm) {
+             const searchUrl = `${instanceUrl}/digital/bl/dmwebservices/index.php?q=dmQuery/${collectionAlias}/${fieldNickname}^${searchTerm}^exact^and/${fieldNickname}!${titleFieldNickname}/${fieldNickname}/200/1/1/0/0/0/0/1/json`
+             fetch(searchUrl)
+                 .then(result => result.json())
+                 .then(data => {
+                     const elesData = [];
+                     // TODO: stop subject/item id name collisions
+                     for (const record of data.records) {
+                         elesData.push({
+                             data: {
+                                 id: record.pointer,
+                                 label: record[titleFieldNickname],
+                                 href: `${instanceUrl}/digital/collection/${collectionAlias}/id/${record.pointer}`,
+                                 iiif: formulateIiifPreview(instanceUrl, collectionAlias, record),
+                                 ntype: "item",
+                             }
+                         });
+                         for (const recordTerm of splitTerms(record[fieldNickname])) {
+                             elesData.push({
+                                 data: {
+                                     id: recordTerm,
+                                     label: recordTerm,
+                                     ntype: "subject",
+                                 }
+                             })
+                             elesData.push({
+                                 data: {
+                                     id: `${recordTerm}->${record.pointer}`,
+                                     source: recordTerm,
+                                     target: record.pointer,
+                                 }
+                             })
+                         }
+                     }
+                     const eles = cy.collection(elesData);
+                     eles.data("searchGeneration", ++currentSearchGeneration);
+                     logSearch(collectionAlias, fieldNickname, searchTerm, eles);
+                     if (!eles.length) {
+                         return;
+                     }
+                     cy.add(eles);
+                     limitGenerations(generationLimit);
+                     // Running layout on a subset of nodes with COSE generates a type error
+                     // Running it on a subset with concentric seems to re-layout the whole graph anyway?
+                     /* eles.layout(layoutOptions).run(); */
+                     cy.layout(layoutOptions).run();
+                 })
+                 .catch(err => {
+                     console.error(err);
+                 });
+         }
+
+         function logSearch(collectionAlias, fieldNickname, searchTerm, eles) {
+             const searchLog = document.getElementById("search-log");
+             const dt = document.createElement("dt");
+             dt.innerHTML = `[<span class="search-index">${collectionAlias}</span>] <span class="search-term">${fieldNickname}:${searchTerm}</span>`;
+             searchLog.append(dt);
+             const dd = document.createElement("dd");
+             let resourceCount = 0;
+             let searchIndexCount = 0;
+             for (let ele of eles) {
+                 if (ele.isNode()) {
+                     if (ele.data().ntype == "item") {
+                         resourceCount++;
+                     } else {
+                         searchIndexCount++;
+                     }
+                 }
+             }
+             dd.innerHTML = `new items: ${resourceCount}<br/>new terms: ${searchIndexCount}`;
+             searchLog.append(dd);
+         }
+
+         function limitGenerations(generationLimit) {
+             if (generationLimit === "all") {
+                 return;
+             }
+             const generationFloor = currentSearchGeneration - Number(generationLimit);
+             cy.remove(`node[searchGeneration < ${generationFloor}], edge[searchGeneration < ${generationFloor}]`);
+         }
+
+         function tiltLabels(flag) {
+             if (flag) {
+                 cy.elements("node").addClass("tilt-label");
+             } else {
+                 cy.elements("node").removeClass("tilt-label");
+             }
+         }
+
+         function listCollections() {
+             const instanceUrl = document.getElementById("instance-url").value;
+             const collectionListUrl = `${instanceUrl}/digital/bl/dmwebservices/index.php?q=dmGetCollectionList/json`;
+             fetch(collectionListUrl)
+                 .then(result => result.json())
+                 .then(data => {
+                     const collectionList = document.getElementById("collection-list");
+                     collectionList.innerHTML = "";
+                     const defaultOption = document.createElement("option");
+                     defaultOption.textContent = "--Choose a collection--";
+                     defaultOption.setAttribute("value", "");
+                     collectionList.appendChild(defaultOption);
+                     data.sort((a, b) => {
+                         if (a.name == b.name) {
+                             return 0;
+                         }
+                         return (a.name > b.name) ? 1 : -1
+                     });
+                     for (const collInfo of data) {
+                         const option = document.createElement("option");
+                         option.setAttribute("value", collInfo.alias.slice(1));
+                         option.textContent = collInfo.name;
+                         collectionList.appendChild(option);
+                     }
+                 })
+                 .catch(err => {
+                     console.error(err);
+                 });
+
+             return false;
+         }
+
+         function listFields() {
+             const instanceUrl = document.getElementById("instance-url").value;
+             const collectionAlias = document.getElementById("collection-list").value;
+             const fieldInfoUrl = `${instanceUrl}/digital/bl/dmwebservices/index.php?q=dmGetCollectionFieldInfo/${collectionAlias}/json`;
+             fetch(fieldInfoUrl)
+                 .then(result => result.json())
+                 .then(data => {
+                     const fieldList = document.getElementById("field-list");
+                     fieldList.innerHTML = "";
+                     const defaultOption = document.createElement("option");
+                     defaultOption.textContent = "--Choose a field--";
+                     defaultOption.setAttribute("value", "");
+                     fieldList.appendChild(defaultOption);
+                     for (const fieldInfo of data) {
+                         if (fieldInfo.dc == "title") {
+                             titleFieldNickname = fieldInfo.nick;
+                         }
+                         if (!fieldInfo.vocab) {
+                             continue;
+                         }
+                         const option = document.createElement("option");
+                         option.setAttribute("value", fieldInfo.nick);
+                         option.textContent = fieldInfo.name;
+                         fieldList.appendChild(option);
+                     }
+                 })
+                 .catch(err => {
+                     console.error(err);
+                 });
+             return false;
+         }
+
+         function listVocab() {
+             const instanceUrl = document.getElementById("instance-url").value;
+             const collectionAlias = document.getElementById("collection-list").value;
+             const fieldNickname = document.getElementById("field-list").value;
+             const vocabInfoUrl = `${instanceUrl}/digital/bl/dmwebservices/index.php?q=dmGetCollectionFieldVocabulary/${collectionAlias}/${fieldNickname}/0/0/json`;
+             fetch(vocabInfoUrl)
+                 .then(result => result.json())
+                 .then(data => {
+                     const vocabList = document.getElementById("vocab-list");
+                     vocabList.innerHTML = "";
+                     const defaultOption = document.createElement("option");
+                     defaultOption.textContent = "--Choose a term--";
+                     defaultOption.setAttribute("value", "");
+                     vocabList.appendChild(defaultOption);
+                     for (const vocabTerm of data) {
+                         const option = document.createElement("option");
+                         option.setAttribute("value", vocabTerm);
+                         option.textContent = vocabTerm;
+                         vocabList.appendChild(option);
+                     }
+                 })
+                 .catch(err => {
+                     console.error(err);
+                 });
+             return false;
+         }
+
+         function graphSearch() {
+             const instanceUrl = document.getElementById("instance-url").value;
+             const collectionAlias = document.getElementById("collection-list").value;
+             const fieldNickname = document.getElementById("field-list").value;
+             const vocabTerm = document.getElementById("vocab-list").value;
+             if (!instanceUrl) { window.alert("Missing instance URL"); }
+             if (!collectionAlias) { window.alert("Missing collection alias"); }
+             if (!fieldNickname) { window.alert("Missing field nickname"); }
+             if (!vocabTerm) { window.alert("Missing vocab term"); }
+             addNodesFromSearch(instanceUrl, collectionAlias, fieldNickname, vocabTerm);
+         }
+
+         function browsingSettings() {
+             const browsingForm = document.getElementById("browsing-settings");
+             generationLimit = browsingForm.generations.value;
+             layoutOptions = layoutOptionsOptions[browsingForm.globalLayout.value];
+             limitGenerations(generationLimit);
+             tiltLabels(browsingForm.tiltLabels.checked);
+             cy.layout(layoutOptions).run();
+             return false;
+         }
+
+         function clearGraph() {
+             cy.elements().remove();
+             return false;
+         }
+
+         function splitTerms(terms) {
+             return terms.split(";").map(s => s.trim()).filter(t => t);
+         }
+
+         function formulateIiifPreview(instanceUrl, collectionAlias, record) {
+             if (record.parentobject == -1) {
+                 if (["jpg", "jpeg", "jp2", "png", "tif", "tiff"].includes(record.filetype)) {
+                     return `${instanceUrl}/iiif/2/${collectionAlias}:${record.pointer}/full/50,/0/default.jpg`
+                 }
+             }
+             return undefined;
+         }
+
+         let highlitNode = undefined;
+         cy.on("tap", "node", e => {
+             const node = e.target;
+             if (highlitNode) {
+                 highlitNode.closedNeighborhood().removeClass("trace-neighbors box-text foreground");
+             }
+             if (highlitNode === node) {
+                 highlitNode = undefined;
+                 return;
+             }
+             highlitNode = node;
+             node.closedNeighborhood().addClass("trace-neighbors box-text foreground");
+         });
+
+         cy.on("dbltap", "node", e => {
+             const node = e.target;
+             if (node.data().ntype === "item") {
+                 window.open(node.data("href"));
+             } else {
+                 node.addClass("searched");
+                 node.data().searchGeneration++;
+                 const instanceUrl = document.getElementById("instance-url").value;
+                 const collectionAlias = document.getElementById("collection-list").value;
+                 const fieldNickname = document.getElementById("field-list").value;
+                 addNodesFromSearch(instanceUrl, collectionAlias, fieldNickname, node.data("label"));
+             }
+         });
+
+         cy.on("mouseover", "node", e => {
+             const node = e.target;
+             node.addClass("box-text foreground");
+         });
+
+         cy.on("mouseout", "node", e => {
+             const node = e.target;
+             if (!node.hasClass("trace-neighbors")) {
+                 node.removeClass("box-text foreground");
+             }
+         });
+
+         cy.on("click", e => {
+             if (highlitNode) {
+                 highlitNode.closedNeighborhood().removeClass("trace-neighbors box-text foreground");
+                 highlitNode = undefined;
+             }
+         });
+        </script>
+    </body>
+</html>
