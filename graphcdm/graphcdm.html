@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <title>graphcdm</title>
-        <meta name="viewport" content="with=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <style>
          .container header {
              position: absolute;
@@ -56,8 +56,39 @@
          #search-query {
              width: 95%;
          }
-         select, input {
+         select, input[type="text"] {
              width: 15em;
+         }
+         #node-info-box {
+             position: absolute;
+             top: 0.5em;
+             right: 0.5em;
+             z-index: 2;
+             border: solid black thin;
+             background-color: white;
+             padding: 0.5em;
+             width: 15em;
+         }
+         #node-info-box h2 {
+             font-size: 1.1em;
+             font-family: Garamond, sans-serif;
+             margin: 0;
+         }
+         #node-data {
+             margin: 0;
+         }
+         #node-data dt {
+             margin: 0;
+             font-weight: bold;
+         }
+         #node-data dd {
+             margin: 0 0 0 0.5em;
+         }
+         .undefined {
+             font-style: italic;
+         }
+         #export-format {
+             width: 5em;
          }
         </style>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.24.0/cytoscape.min.js"></script>
@@ -73,14 +104,14 @@
                             <label for="instance-url">CONTENTdm instance URL</label><br>
                             <input type="text" id="instance-url" name="instanceUrl" value="https://cdm15808.contentdm.oclc.org" tabindex="1" />
                         </p>
-                        <p><button type="button" onClick="listCollections()">List Collections</button></p>
+                        <p><button type="button" onClick="listCollections(false)">List Collections</button></p>
                         <p>
                             <label for="collection-list">Collections</label><br>
-                            <select id="collection-list" name="collectionList" onChange="listFields()"></select>
+                            <select id="collection-list" name="collectionList" onChange="listFields(false)"></select>
                         </p>
                         <p>
                             <label for="field-list">Collection Vocab Fields</label><br>
-                            <select id="field-list" name="fieldList" onChange="listVocab()"></select>
+                            <select id="field-list" name="fieldList" onChange="listVocab(false)"></select>
                         </p>
                         <p>
                             <label for="vocab-list">Vocabulary Terms</label><br>
@@ -114,6 +145,7 @@
                                 <option value="cose">COSE</option>
                                 <option value="breadthfirstTopDown">Breadthfirst (top-down)</option>
                                 <option value="breadthfirstCircle">Breadthfirst (circle)</option>
+                                <option value="grid">Grid</option>
                             </select>
                         </p>
                         <p>
@@ -123,16 +155,41 @@
                         <p><button type="submit">Redraw</button></p>
                     </fieldset>
                 </form>
+                <form id="export-graph" onSubmit="return exportGraph();">
+                    <fieldset>
+                        <legend>Export graph</legend>
+                        <p>
+                            <select id="export-format" name="exportFormat" onChange="updateExportOptions()">
+                                <option value="png">PNG</option>
+                                <option value="jpg">JPG</option>
+                                <option value="json">JSON</option>
+                            </select>
+                            <label for="exportScreenSizeFull">Graph</label>
+                            <input type="radio" id="exportScreenSizeFull" name="exportScreenSize" value="full" checked>
+                            <label for="exportScreenSizeView">View</label>
+                            <input type="radio" id="exportScreenSizeView" name="exportScreenSize" value="view">
+                        </p>
+                        <p>
+                            <button type="submit">Create Export</button>
+                            <span id="download"></span>
+                        </p>
+                    </fieldset>
+                </form>
                 <h2>Search Log</h2>
                 <div class="search-log-container">
                     <dl id="search-log"></dl>
                 </div>
             </header>
             <div id="cy"></div>
+            <div id="node-info-box">
+                <h2>Node Info</h2>
+                <dl id="node-data"></dl>
+            </div>
         </div>
         <script>
          "use strict";
          let titleFieldNickname = undefined;
+         const itemNodeSize = 60;
          let currentSearchGeneration = 0;
          let generationLimit = document.getElementById("generations").value;
          const layoutOptionsOptions = {
@@ -158,6 +215,10 @@
              breadthfirstCircle: {
                  name: "breadthfirst",
                  circle: true,
+             },
+             grid: {
+                 name: "grid",
+                 nodeDimensionsIncludeLabels: true,
              },
          };
          let layoutOptions = layoutOptionsOptions[document.getElementById("global-layout").value];
@@ -194,8 +255,8 @@
              {
                  selector: "node[ntype = 'item']",
                  style: {
-                     "height": 42,
-                     "width": 42,
+                     "height": itemNodeSize,
+                     "width": itemNodeSize,
                      "background-fit": "cover",
                      "shape": "rectangle",
                      "background-color": "forestgreen",
@@ -271,7 +332,7 @@
                                  id: record.pointer,
                                  label: record[titleFieldNickname],
                                  href: `${instanceUrl}/digital/collection/${collectionAlias}/id/${record.pointer}`,
-                                 iiif: formulateIiifPreview(instanceUrl, collectionAlias, record),
+                                 iiif: formulateIiifPreview(instanceUrl, collectionAlias, record.pointer, record.filetype),
                                  ntype: "item",
                              }
                          });
@@ -347,29 +408,34 @@
              }
          }
 
-         function listCollections() {
-             const instanceUrl = document.getElementById("instance-url").value;
+         function listCollections(callback) {
+             const instanceUrl = rchomp(document.getElementById("instance-url").value, "/");
              const collectionListUrl = `${instanceUrl}/digital/bl/dmwebservices/index.php?q=dmGetCollectionList/json`;
              fetch(collectionListUrl)
                  .then(result => result.json())
                  .then(data => {
                      const collectionList = document.getElementById("collection-list");
                      collectionList.innerHTML = "";
+                     document.getElementById("field-list").innerHTML = "";
+                     document.getElementById("vocab-list").innerHTML = "";
                      const defaultOption = document.createElement("option");
                      defaultOption.textContent = "--Choose a collection--";
                      defaultOption.setAttribute("value", "");
                      collectionList.appendChild(defaultOption);
                      data.sort((a, b) => {
-                         if (a.name == b.name) {
+                         if (a.name === b.name) {
                              return 0;
                          }
                          return (a.name > b.name) ? 1 : -1
                      });
                      for (const collInfo of data) {
                          const option = document.createElement("option");
-                         option.setAttribute("value", collInfo.alias.slice(1));
+                         option.setAttribute("value", lchomp(collInfo.alias, "/"));
                          option.textContent = collInfo.name;
                          collectionList.appendChild(option);
+                     }
+                     if (callback) {
+                         callback();
                      }
                  })
                  .catch(err => {
@@ -379,8 +445,8 @@
              return false;
          }
 
-         function listFields() {
-             const instanceUrl = document.getElementById("instance-url").value;
+         function listFields(callback) {
+             const instanceUrl = rchomp(document.getElementById("instance-url").value, "/");
              const collectionAlias = document.getElementById("collection-list").value;
              const fieldInfoUrl = `${instanceUrl}/digital/bl/dmwebservices/index.php?q=dmGetCollectionFieldInfo/${collectionAlias}/json`;
              fetch(fieldInfoUrl)
@@ -388,12 +454,14 @@
                  .then(data => {
                      const fieldList = document.getElementById("field-list");
                      fieldList.innerHTML = "";
+                     document.getElementById("vocab-list").innerHTML = "";
                      const defaultOption = document.createElement("option");
                      defaultOption.textContent = "--Choose a field--";
                      defaultOption.setAttribute("value", "");
                      fieldList.appendChild(defaultOption);
+                     titleFieldNickname = undefined;
                      for (const fieldInfo of data) {
-                         if (fieldInfo.dc == "title") {
+                         if (fieldInfo.dc === "title" && !titleFieldNickname) {
                              titleFieldNickname = fieldInfo.nick;
                          }
                          if (!fieldInfo.vocab) {
@@ -404,6 +472,9 @@
                          option.textContent = fieldInfo.name;
                          fieldList.appendChild(option);
                      }
+                     if (callback) {
+                         callback();
+                     }
                  })
                  .catch(err => {
                      console.error(err);
@@ -411,8 +482,8 @@
              return false;
          }
 
-         function listVocab() {
-             const instanceUrl = document.getElementById("instance-url").value;
+         function listVocab(callback) {
+             const instanceUrl = rchomp(document.getElementById("instance-url").value, "/");
              const collectionAlias = document.getElementById("collection-list").value;
              const fieldNickname = document.getElementById("field-list").value;
              const vocabInfoUrl = `${instanceUrl}/digital/bl/dmwebservices/index.php?q=dmGetCollectionFieldVocabulary/${collectionAlias}/${fieldNickname}/0/0/json`;
@@ -431,6 +502,9 @@
                          option.textContent = vocabTerm;
                          vocabList.appendChild(option);
                      }
+                     if (callback) {
+                         callback();
+                     }
                  })
                  .catch(err => {
                      console.error(err);
@@ -439,14 +513,14 @@
          }
 
          function graphSearch() {
-             const instanceUrl = document.getElementById("instance-url").value;
+             const instanceUrl = rchomp(document.getElementById("instance-url").value, "/");
              const collectionAlias = document.getElementById("collection-list").value;
              const fieldNickname = document.getElementById("field-list").value;
              const vocabTerm = document.getElementById("vocab-list").value;
-             if (!instanceUrl) { window.alert("Missing instance URL"); }
-             if (!collectionAlias) { window.alert("Missing collection alias"); }
-             if (!fieldNickname) { window.alert("Missing field nickname"); }
-             if (!vocabTerm) { window.alert("Missing vocab term"); }
+             if (!instanceUrl) { window.alert("Missing CONTENTdm instance URL"); return; }
+             if (!collectionAlias) { window.alert("Missing Collection"); return; }
+             if (!fieldNickname) { window.alert("Missing Collection Vocab Field"); return; }
+             if (!vocabTerm) { window.alert("Missing Vocabulary Term"); return; }
              addNodesFromSearch(instanceUrl, collectionAlias, fieldNickname, vocabTerm);
          }
 
@@ -465,15 +539,46 @@
              return false;
          }
 
+         function exportGraph() {
+             const exportForm = document.getElementById("export-graph");
+             const exportFormat = exportForm.exportFormat.value;
+             const fullSize = exportForm.exportScreenSize.value === "full"
+             let exportBlob;
+             if (exportFormat === "png") {
+                 exportBlob = cy.png({ output: "blob", full: fullSize });
+             } else if (exportFormat === "jpg") {
+                 exportBlob = cy.jpg({ output: "blob", full: fullSize });
+             } else if (exportFormat === "json") {
+                 exportBlob = new Blob([JSON.stringify(cy.json())], {type: "application/javascript;charset=utf-8"});
+             } else {
+                 window.alert("Invalid save format");
+                 return false;
+             }
+             const exportUrl = URL.createObjectURL(exportBlob);
+             const downloadDiv = document.getElementById("download");
+             downloadDiv.innerHTML = `<a href="${exportUrl}">${exportFormat.toUpperCase()}</a>`;
+             return false;
+         }
+
+         function updateExportOptions() {
+             const exportForm = document.getElementById("export-graph");
+             const exportFormat = exportForm.exportFormat.value;
+             if (exportFormat === "json") {
+                 exportForm.exportScreenSizeFull.disabled = true;
+                 exportForm.exportScreenSizeView.disabled = true;
+             } else {
+                 exportForm.exportScreenSizeFull.disabled = false;
+                 exportForm.exportScreenSizeView.disabled = false;
+             }
+         }
+
          function splitTerms(terms) {
              return terms.split(";").map(s => s.trim()).filter(t => t);
          }
 
-         function formulateIiifPreview(instanceUrl, collectionAlias, record) {
-             if (record.parentobject == -1) {
-                 if (["jpg", "jpeg", "jp2", "png", "tif", "tiff"].includes(record.filetype)) {
-                     return `${instanceUrl}/iiif/2/${collectionAlias}:${record.pointer}/full/50,/0/default.jpg`
-                 }
+         function formulateIiifPreview(instanceUrl, collectionAlias, pointer, filetype) {
+             if (["jpg", "jpeg", "jp2", "png", "tif", "tiff"].includes(filetype)) {
+                 return `${instanceUrl}/iiif/2/${collectionAlias}:${pointer}/full/${itemNodeSize},/0/default.jpg`
              }
              return undefined;
          }
@@ -499,7 +604,7 @@
              } else {
                  node.addClass("searched");
                  node.data().searchGeneration++;
-                 const instanceUrl = document.getElementById("instance-url").value;
+                 const instanceUrl = rchomp(document.getElementById("instance-url").value, "/");
                  const collectionAlias = document.getElementById("collection-list").value;
                  const fieldNickname = document.getElementById("field-list").value;
                  addNodesFromSearch(instanceUrl, collectionAlias, fieldNickname, node.data("label"));
@@ -509,13 +614,39 @@
          cy.on("mouseover", "node", e => {
              const node = e.target;
              node.addClass("box-text foreground");
+             updateNodeData(node);
          });
+
+         function updateNodeData(node) {
+             const nodeDataDl = document.getElementById("node-data");
+             addTermDefinition(nodeDataDl, "totalDegree", node.totalDegree());
+             for (const [key, value] of Object.entries(node.data())) {
+                 addTermDefinition(nodeDataDl, key, value);
+             }
+         }
+
+         function addTermDefinition(dl, key, value) {
+             const dt = document.createElement("dt");
+             dt.textContent = key;
+             dl.appendChild(dt);
+             const dd = document.createElement("dd");
+             if (value === undefined) {
+                 dd.innerHTML = `<span class="undefined">undefined</span>`;
+             } else if (value === "") {
+                 dd.textContent = '""';
+             } else {
+                 dd.textContent = value
+             }
+             dl.appendChild(dd);
+         }
 
          cy.on("mouseout", "node", e => {
              const node = e.target;
              if (!node.hasClass("trace-neighbors")) {
                  node.removeClass("box-text foreground");
              }
+             const nodeData = document.getElementById("node-data");
+             nodeData.innerHTML = "";
          });
 
          cy.on("click", e => {
@@ -524,6 +655,110 @@
                  highlitNode = undefined;
              }
          });
+
+         function lchomp(s, head) {
+             return s.startsWith(head) ? s.slice(head.length) : s;
+         }
+
+         function rchomp(s, tail) {
+             return s.endsWith(tail) ? s.slice(0, s.length - tail.length) : s;
+         }
+
+         function init() {
+             const windowUrl = new URL(window.location.href);
+             if (!windowUrl.search) {
+                 return;
+             }
+             const searchParams = new URLSearchParams(windowUrl.search);
+             const targetCdmItemUrl = searchParams.get("url");
+             const targetVocabFieldNickname = searchParams.get("nick");
+             initFromItemUrl(targetCdmItemUrl, targetVocabFieldNickname);
+         }
+
+         function initFromItemUrl(url, vocabFieldNickname) {
+             const itemInfo = parseCdmItemUrl(url);
+             document.getElementById("instance-url").value = itemInfo.instanceUrl;
+             listCollections(() => {
+                 document.getElementById("collection-list").value = itemInfo.collectionAlias;
+                 listFields(() => {
+                     if (!vocabFieldNickname) {
+                         const vocabFieldOptions = Array.from(document.querySelectorAll("#field-list > option"));
+                         // Remember the empty top option
+                         if (vocabFieldOptions.length > 1) {
+                             vocabFieldNickname = vocabFieldOptions[1].value;
+                         }
+                     }
+                     if (vocabFieldNickname) {
+                         document.getElementById("field-list").value = vocabFieldNickname;
+                         addNodeByPointer(
+                             itemInfo.instanceUrl,
+                             itemInfo.collectionAlias,
+                             itemInfo.pointer,
+                             titleFieldNickname,
+                             vocabFieldNickname,
+                         )
+                     }
+                     listVocab(false);
+                 })
+             })
+             // TODO: a field axis must be chosen, how?
+         }
+
+         function addNodeByPointer(instanceUrl, collectionAlias, pointer, titleFieldNickname, vocabFieldNickname) {
+             pointer = Number(pointer);
+             fetch(`${instanceUrl}/digital/bl/dmwebservices/index.php?q=dmGetItemInfo/${collectionAlias}/${pointer}/json`)
+                 .then(result => result.json())
+                 .then(itemInfo => {
+                     const elesData = [];
+                     const [ _, fileType ] = itemInfo.find.split(".");
+                     elesData.push({
+                         data: {
+                             id: pointer,
+                             label: itemInfo[titleFieldNickname],
+                             href: `${instanceUrl}/digital/collection/${collectionAlias}/id/${pointer}`,
+                             iiif: formulateIiifPreview(instanceUrl, collectionAlias, pointer, fileType),
+                             ntype: "item",
+                         }
+                     });
+                     for (const recordTerm of splitTerms(itemInfo[vocabFieldNickname])) {
+                         elesData.push({
+                             data: {
+                                 id: recordTerm,
+                                 label: recordTerm,
+                                 ntype: "subject",
+                             }
+                         })
+                         elesData.push({
+                             data: {
+                                 id: `${recordTerm}->${pointer}`,
+                                 source: recordTerm,
+                                 target: pointer,
+                             }
+                         })
+                     }
+                     const eles = cy.collection(elesData);
+                     eles.data("searchGeneration", ++currentSearchGeneration);
+                     cy.add(eles);
+                     cy.layout(layoutOptions).run();
+                 })
+         }
+
+         function parseCdmItemUrl(url) {
+             const itemUrl = new URL(url);
+             const instanceUrl = itemUrl.origin
+             const match = itemUrl.pathname.match(/^\/digital\/collection\/(.*)\/id\/(\d+)/);
+             if (match === null) {
+                 return undefined;
+             }
+             const [_, collectionAlias, pointer] = match;
+             return {
+                 "instanceUrl": instanceUrl,
+                 "collectionAlias": collectionAlias,
+                 "pointer": pointer,
+             }
+         }
+
+         init();
         </script>
     </body>
 </html>
