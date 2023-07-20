@@ -5,7 +5,7 @@
         <title>graphcdm</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <style>
-         .container header {
+         #container header {
              position: absolute;
              left: 0.5em;
              top: 0.5em;
@@ -15,22 +15,22 @@
              width: 15em;
              z-index: 2;
          }
-         .container header h1 {
+         #container header h1 {
              margin: 0 0 0.5em 0;
              font-family: Garamond, sans-serif;
          }
-         .container header h2 {
+         #container header h2 {
              font-size: 1em;
              margin: 0 0 0.3em 0;
              font-family: Garamond, sans-serif;
          }
-         .container header form {
+         #container header form {
              margin: 0.5em 0 0.5em 0;
          }
-         .container header form p {
+         #container header form p {
              margin: 0.3em 0 0.3em 0;
          }
-         .container header form legend {
+         #container header form legend {
              font-family: sans-serif;
          }
          #cy {
@@ -90,11 +90,20 @@
          #export-format {
              width: 5em;
          }
+         #overflow {
+             position: absolute;
+             top: 0.5em;
+             left: 18em;
+             z-index: 2;
+             border: solid black thin;
+             background-color: white;
+             padding: 0.5em;
+         }
         </style>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.24.0/cytoscape.min.js"></script>
     </head>
     <body>
-        <div class="container">
+        <div id="container">
             <header>
                 <h1>graphcdm</h1>
                 <form id="search">
@@ -102,7 +111,12 @@
                         <legend>Search a CONTENTdm</legend>
                         <p>
                             <label for="instance-url">CONTENTdm instance URL</label><br>
-                            <input type="text" id="instance-url" name="instanceUrl" value="https://cdm15808.contentdm.oclc.org" tabindex="1" />
+                            <input list="instance-url-options" id="instance-url" name="instanceUrl" value="https://media.library.ohio.edu" tabindex="1" />
+                            <datalist id="instance-url-options">
+                                <option value="https://media.library.ohio.edu" />
+                                <option value="https://www.ohiomemory.org" />
+                                <option value="https://www.idaillinois.org" />
+                            </datalist>
                         </p>
                         <p><button type="button" onClick="listCollections(false)">List Collections</button></p>
                         <p>
@@ -142,9 +156,9 @@
                             <label for="global-layout">Layout</label>
                             <select id="global-layout" name="globalLayout">
                                 <option value="concentric">Concentric</option>
-                                <option value="cose">COSE</option>
-                                <option value="breadthfirstTopDown">Breadthfirst (top-down)</option>
                                 <option value="breadthfirstCircle">Breadthfirst (circle)</option>
+                                <option value="breadthfirstTopDown">Breadthfirst (top-down)</option>
+                                <option value="cose">COSE</option>
                                 <option value="grid">Grid</option>
                             </select>
                         </p>
@@ -190,6 +204,7 @@
          "use strict";
          let titleFieldNickname = undefined;
          const itemNodeSize = 60;
+         const searchMaxRecs = 100;
          let currentSearchGeneration = 0;
          let generationLimit = document.getElementById("generations").value;
          const layoutOptionsOptions = {
@@ -319,95 +334,6 @@
              style: cytoscapeStyle,
          });
 
-         function addNodesFromSearch(instanceUrl, collectionAlias, fieldNickname, searchTerm) {
-             const searchUrl = `${instanceUrl}/digital/bl/dmwebservices/index.php?q=dmQuery/${collectionAlias}/${fieldNickname}^${searchTerm}^exact^and/${fieldNickname}!${titleFieldNickname}/${fieldNickname}/200/1/1/0/0/0/0/1/json`
-             fetch(searchUrl)
-                 .then(result => result.json())
-                 .then(data => {
-                     const elesData = [];
-                     // TODO: stop subject/item id name collisions
-                     for (const record of data.records) {
-                         elesData.push({
-                             data: {
-                                 id: record.pointer,
-                                 label: record[titleFieldNickname],
-                                 href: `${instanceUrl}/digital/collection/${collectionAlias}/id/${record.pointer}`,
-                                 iiif: formulateIiifPreview(instanceUrl, collectionAlias, record.pointer, record.filetype),
-                                 ntype: "item",
-                             }
-                         });
-                         for (const recordTerm of splitTerms(record[fieldNickname])) {
-                             elesData.push({
-                                 data: {
-                                     id: recordTerm,
-                                     label: recordTerm,
-                                     ntype: "subject",
-                                 }
-                             })
-                             elesData.push({
-                                 data: {
-                                     id: `${recordTerm}->${record.pointer}`,
-                                     source: recordTerm,
-                                     target: record.pointer,
-                                 }
-                             })
-                         }
-                     }
-                     const eles = cy.collection(elesData);
-                     eles.data("searchGeneration", ++currentSearchGeneration);
-                     logSearch(collectionAlias, fieldNickname, searchTerm, eles);
-                     if (!eles.length) {
-                         return;
-                     }
-                     cy.add(eles);
-                     limitGenerations(generationLimit);
-                     // Running layout on a subset of nodes with COSE generates a type error
-                     // Running it on a subset with concentric seems to re-layout the whole graph anyway?
-                     /* eles.layout(layoutOptions).run(); */
-                     cy.layout(layoutOptions).run();
-                 })
-                 .catch(err => {
-                     console.error(err);
-                 });
-         }
-
-         function logSearch(collectionAlias, fieldNickname, searchTerm, eles) {
-             const searchLog = document.getElementById("search-log");
-             const dt = document.createElement("dt");
-             dt.innerHTML = `[<span class="search-index">${collectionAlias}</span>] <span class="search-term">${fieldNickname}:${searchTerm}</span>`;
-             searchLog.append(dt);
-             const dd = document.createElement("dd");
-             let resourceCount = 0;
-             let searchIndexCount = 0;
-             for (let ele of eles) {
-                 if (ele.isNode()) {
-                     if (ele.data().ntype == "item") {
-                         resourceCount++;
-                     } else {
-                         searchIndexCount++;
-                     }
-                 }
-             }
-             dd.innerHTML = `new items: ${resourceCount}<br/>new terms: ${searchIndexCount}`;
-             searchLog.append(dd);
-         }
-
-         function limitGenerations(generationLimit) {
-             if (generationLimit === "all") {
-                 return;
-             }
-             const generationFloor = currentSearchGeneration - Number(generationLimit);
-             cy.remove(`node[searchGeneration < ${generationFloor}], edge[searchGeneration < ${generationFloor}]`);
-         }
-
-         function tiltLabels(flag) {
-             if (flag) {
-                 cy.elements("node").addClass("tilt-label");
-             } else {
-                 cy.elements("node").removeClass("tilt-label");
-             }
-         }
-
          function listCollections(callback) {
              const instanceUrl = rchomp(document.getElementById("instance-url").value, "/");
              const collectionListUrl = `${instanceUrl}/digital/bl/dmwebservices/index.php?q=dmGetCollectionList/json`;
@@ -517,10 +443,22 @@
              const collectionAlias = document.getElementById("collection-list").value;
              const fieldNickname = document.getElementById("field-list").value;
              const vocabTerm = document.getElementById("vocab-list").value;
-             if (!instanceUrl) { window.alert("Missing CONTENTdm instance URL"); return; }
-             if (!collectionAlias) { window.alert("Missing Collection"); return; }
-             if (!fieldNickname) { window.alert("Missing Collection Vocab Field"); return; }
-             if (!vocabTerm) { window.alert("Missing Vocabulary Term"); return; }
+             if (!instanceUrl) {
+                 window.alert("Missing CONTENTdm instance URL");
+                 return;
+             }
+             if (!collectionAlias) {
+                 window.alert("Missing Collection");
+                 return;
+             }
+             if (!fieldNickname) {
+                 window.alert("Missing Collection Vocab Field");
+                 return;
+             }
+             if (!vocabTerm) {
+                 window.alert("Missing Vocabulary Term");
+                 return;
+             }
              addNodesFromSearch(instanceUrl, collectionAlias, fieldNickname, vocabTerm);
          }
 
@@ -532,6 +470,14 @@
              tiltLabels(browsingForm.tiltLabels.checked);
              cy.layout(layoutOptions).run();
              return false;
+         }
+
+         function tiltLabels(flag) {
+             if (flag) {
+                 cy.elements("node").addClass("tilt-label");
+             } else {
+                 cy.elements("node").removeClass("tilt-label");
+             }
          }
 
          function clearGraph() {
@@ -572,6 +518,195 @@
              }
          }
 
+         async function addNodesFromSearch(instanceUrl, collectionAlias, fieldNickname, searchTerm) {
+             clearOverflowOffer();
+             const searchUrl = dmQuery(
+                 instanceUrl, collectionAlias, titleFieldNickname, fieldNickname, searchTerm, 1, searchMaxRecs
+             );
+             try {
+                 const result = await fetch(searchUrl);
+                 const data = await result.json();
+                 currentSearchGeneration++;
+                 const eles = addNodesFromRecords(
+                     instanceUrl, collectionAlias, titleFieldNickname, fieldNickname, data.records
+                 );
+                 const logDd = logSearch(collectionAlias, fieldNickname, searchTerm, eles);
+                 offerToContinueSearch(instanceUrl, collectionAlias, fieldNickname, searchTerm, data, logDd);
+                 if (!eles.length) {
+                     return;
+                 }
+                 limitGenerations(generationLimit);
+                 // Running layout on a subset of nodes with COSE generates a type error
+                 // Running it on a subset with concentric seems to re-layout the whole graph anyway?
+                 /* eles.layout(layoutOptions).run(); */
+                 cy.layout(layoutOptions).run();
+             } catch(error) {
+                 console.error(error);
+             }
+         }
+
+         function addNodesFromRecords(instanceUrl, collectionAlias, titleFieldNickname, fieldNickname, records) {
+             const elesData = [];
+             // TODO: stop subject/item id name collisions
+             for (const record of records) {
+                 elesData.push(
+                     ...createNodeData(
+                         instanceUrl,
+                         collectionAlias,
+                         record.pointer,
+                         record[titleFieldNickname],
+                         record.filetype,
+                         record[fieldNickname]
+                     )
+                 );
+             }
+             const eles = cy.collection(elesData);
+             eles.data("searchGeneration", currentSearchGeneration);
+             cy.add(eles);
+             return eles;
+         }
+
+         function createNodeData(instanceUrl, collectionAlias, pointer, label, fileType, terms) {
+             const elesData = [];
+             elesData.push({
+                 data: {
+                     id: pointer,
+                     label: label,
+                     href: `${instanceUrl}/digital/collection/${collectionAlias}/id/${pointer}`,
+                     iiif: formulateIiifPreview(instanceUrl, collectionAlias, pointer, fileType),
+                     ntype: "item",
+                 }
+             });
+             for (const recordTerm of splitTerms(terms)) {
+                 elesData.push({
+                     data: {
+                         id: recordTerm,
+                         label: recordTerm,
+                         ntype: "subject",
+                     }
+                 })
+                 elesData.push({
+                     data: {
+                         id: `${recordTerm}->${pointer}`,
+                         source: recordTerm,
+                         target: pointer,
+                     }
+                 })
+             }
+             return elesData;
+         }
+
+         function logSearch(collectionAlias, fieldNickname, searchTerm, eles) {
+             const searchLog = document.getElementById("search-log");
+             const dt = document.createElement("dt");
+             dt.innerHTML = `[<span class="search-index">${collectionAlias}</span>] ` +
+                            `<span class="search-term">${fieldNickname}:${searchTerm}</span>`;
+             const dd = document.createElement("dd");
+             const [itemCount, termCount] = countItemsAndTerms(eles);
+             dd.innerHTML = `Items + <span class="new-items">${itemCount}</span> ` +
+                            `Terms + <span class="new-terms">${termCount}</span>`;
+             searchLog.prepend(dt, dd);
+             return dd;
+         }
+
+         function countItemsAndTerms(eles) {
+             let itemCount = 0;
+             let termCount = 0;
+             for (const ele of eles) {
+                 if (ele.isNode()) {
+                     if (ele.data().ntype == "item") {
+                         itemCount++;
+                     } else {
+                         termCount++;
+                     }
+                 }
+             }
+             return [itemCount, termCount]
+         }
+
+         function limitGenerations(generationLimit) {
+             if (generationLimit === "all") {
+                 return;
+             }
+             const generationFloor = currentSearchGeneration - Number(generationLimit);
+             cy.remove(`node[searchGeneration < ${generationFloor}], edge[searchGeneration < ${generationFloor}]`);
+         }
+
+         function offerToContinueSearch(instanceUrl, collectionAlias, fieldNickname, searchTerm, data, logDd) {
+             if (data.pager.total <= Number(data.pager.maxrecs)) {
+                 return;
+             }
+             const overflowDiv = document.createElement("div");
+             overflowDiv.id = "overflow";
+             overflowDiv.innerHTML = `<span>Search capped at ${data.pager.maxrecs} of ${data.pager.total}, continue?</span> ` +
+                                     '<button type="button" id="complete-search-yes">Yes</button>' +
+                                     '<button type="button" id="complete-search-no">No</button>';
+             document.getElementById("container").appendChild(overflowDiv);
+             document.getElementById("complete-search-no").addEventListener("click", () => clearOverflowOffer());
+             document.getElementById("complete-search-yes").addEventListener("click", () => {
+                 clearOverflowOffer();
+                 continueSearch(
+                     instanceUrl, collectionAlias, titleFieldNickname, fieldNickname, searchTerm, data, logDd
+                 );
+             });
+         }
+
+         function clearOverflowOffer() {
+             const offerBox = document.getElementById("overflow");
+             if (offerBox) {
+                 offerBox.remove();
+             }
+         }
+
+         async function continueSearch(
+             instanceUrl, collectionAlias, titleFieldNickname, fieldNickname, searchTerm, data, logDd
+         ) {
+             const remainingRecords = await completeDmQuery(
+                 instanceUrl, collectionAlias, titleFieldNickname, fieldNickname, searchTerm, data.records.length
+             );
+             const eles = addNodesFromRecords(instanceUrl, collectionAlias, titleFieldNickname, fieldNickname, remainingRecords);
+             const [itemCount, termCount] = countItemsAndTerms(eles);
+             const newItems = logDd.getElementsByClassName("new-items")[0];
+             newItems.textContent = Number(newItems.textContent) + itemCount;
+             const newTerms = logDd.getElementsByClassName("new-terms")[0];
+             newTerms.textContent = Number(newTerms.textContent) + termCount;
+             cy.layout(layoutOptions).run();
+         }
+
+         async function completeDmQuery(
+             instanceUrl, collectionAlias, titleFieldNickname, fieldNickname, searchTerm, start
+         ) {
+             let remainingRecords = [];
+             let nextStart = start;
+             let total = undefined;
+             do {
+                 try {
+                     const nextPageUrl = dmQuery(
+                         instanceUrl,
+                         collectionAlias,
+                         titleFieldNickname,
+                         fieldNickname,
+                         searchTerm,
+                         nextStart,
+                         1024
+                     );
+                     const result = await fetch(nextPageUrl);
+                     const data = await result.json();
+                     remainingRecords = remainingRecords.concat(data.records);
+                     nextStart = remainingRecords.length;
+                     total = data.pager.total;
+                 } catch(error) {
+                     console.error(error);
+                     return [];  // TODO: how to error here?
+                 }
+             } while (remainingRecords.length + start < total);
+             return remainingRecords;
+         }
+
+         function dmQuery(instanceUrl, collectionAlias, titleFieldNickname, fieldNickname, searchTerm, start, maxRecs) {
+             return `${instanceUrl}/digital/bl/dmwebservices/index.php?q=dmQuery/${collectionAlias}/${fieldNickname}^${encodeURIComponent(searchTerm)}^exact^and/${fieldNickname}!${titleFieldNickname}/${fieldNickname}/${maxRecs}/${start}/1/0/0/0/0/1/json`
+         }
+
          function splitTerms(terms) {
              return terms.split(";").map(s => s.trim()).filter(t => t);
          }
@@ -584,6 +719,7 @@
          }
 
          let highlitNode = undefined;
+
          cy.on("tap", "node", e => {
              const node = e.target;
              if (highlitNode) {
@@ -701,7 +837,6 @@
                      listVocab(false);
                  })
              })
-             // TODO: a field axis must be chosen, how?
          }
 
          function addNodeByPointer(instanceUrl, collectionAlias, pointer, titleFieldNickname, vocabFieldNickname) {
@@ -709,33 +844,8 @@
              fetch(`${instanceUrl}/digital/bl/dmwebservices/index.php?q=dmGetItemInfo/${collectionAlias}/${pointer}/json`)
                  .then(result => result.json())
                  .then(itemInfo => {
-                     const elesData = [];
-                     const [ _, fileType ] = itemInfo.find.split(".");
-                     elesData.push({
-                         data: {
-                             id: pointer,
-                             label: itemInfo[titleFieldNickname],
-                             href: `${instanceUrl}/digital/collection/${collectionAlias}/id/${pointer}`,
-                             iiif: formulateIiifPreview(instanceUrl, collectionAlias, pointer, fileType),
-                             ntype: "item",
-                         }
-                     });
-                     for (const recordTerm of splitTerms(itemInfo[vocabFieldNickname])) {
-                         elesData.push({
-                             data: {
-                                 id: recordTerm,
-                                 label: recordTerm,
-                                 ntype: "subject",
-                             }
-                         })
-                         elesData.push({
-                             data: {
-                                 id: `${recordTerm}->${pointer}`,
-                                 source: recordTerm,
-                                 target: pointer,
-                             }
-                         })
-                     }
+                     const [, fileType] = itemInfo.find.split(".");
+                     const elesData = createNodeData(instanceUrl, collectionAlias, pointer, itemInfo[titleFieldNickname], fileType, itemInfo[vocabFieldNickname]);
                      const eles = cy.collection(elesData);
                      eles.data("searchGeneration", ++currentSearchGeneration);
                      cy.add(eles);
@@ -750,7 +860,7 @@
              if (match === null) {
                  return undefined;
              }
-             const [_, collectionAlias, pointer] = match;
+             const [, collectionAlias, pointer] = match;
              return {
                  "instanceUrl": instanceUrl,
                  "collectionAlias": collectionAlias,
